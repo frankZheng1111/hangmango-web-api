@@ -1,0 +1,6 @@
+{
+  "projectName": "hangmango-web-api",
+  "server": {
+    "port": 8080
+  }
+}

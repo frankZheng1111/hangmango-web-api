@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"hangmango-web-api/config"
 	"net/http"
 )
 
@@ -14,5 +16,5 @@ func main() {
 		})
 	})
 
-	router.Run(":8080")
+	router.Run(fmt.Sprintf(":%d", config.Config.Server.Port))
 }
