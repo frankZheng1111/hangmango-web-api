@@ -7,3 +7,9 @@
   ```
   goose -env=$GO_ENV up
   ```
+## Install dependency
+
+- need [glide](https://github.com/Masterminds/glide)
+  ```
+  glide install
+  ```
