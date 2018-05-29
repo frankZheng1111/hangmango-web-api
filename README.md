@@ -13,3 +13,15 @@
   ```
   glide install
   ```
+
+## Run Unit Test
+
+- run all unit test
+  ```
+  GOENV=test go test -coverprofile coverage.out ./...
+  ```
+
+- get total coverage
+  ```
+  go tool cover -func=coverage.out
+  ```
