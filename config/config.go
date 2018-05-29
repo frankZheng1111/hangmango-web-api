@@ -25,7 +25,7 @@ func init() {
 	InitConfig(&Config)
 }
 
-func generateConfigPath() string {
+func ConfigFilePath() string {
 	var projectGoPath string
 	env := os.Getenv("GOENV")
 	// 在GOPATH 寻找项目存在的那一条路径
@@ -41,7 +41,7 @@ func generateConfigPath() string {
 }
 
 func InitConfig(config *JSONConfig) {
-	filePath := generateConfigPath()
+	filePath := ConfigFilePath()
 	fmt.Println(filePath)
 	file, err := os.Open(filePath)
 	defer file.Close()
