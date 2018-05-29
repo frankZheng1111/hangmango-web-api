@@ -2,7 +2,9 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type JSONConfig struct {
@@ -17,14 +19,24 @@ type Server struct {
 var Config JSONConfig
 
 func init() {
-	filePath := "config/dev.json"
+	InitConfig(&Config)
+}
+
+func generateWorkPath() string {
+	env := os.Getenv("GOENV")
+	workDir := os.Getenv("GOWORKDIR")
+	return filepath.Join(workDir, "config", fmt.Sprintf("%s.json", env))
+}
+
+func InitConfig(config *JSONConfig) {
+	filePath := generateWorkPath()
 	file, err := os.Open(filePath)
 	defer file.Close()
 	if err != nil {
 		panic(err)
 	}
 	decoder := json.NewDecoder(file)
-	if err = decoder.Decode(&Config); err != nil {
+	if err = decoder.Decode(&config); err != nil {
 		panic(err)
 	}
 }

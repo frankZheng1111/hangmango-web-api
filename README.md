@@ -5,7 +5,7 @@
 
 - need [goose](https://bitbucket.org/liamstask/goose)
   ```
-  goose -env=$GO_ENV up
+  goose -env=$GOENV up
   ```
 ## Install dependency
 
