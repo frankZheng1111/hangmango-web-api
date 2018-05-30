@@ -11,4 +11,6 @@ func InitRouters(version *gin.RouterGroup) {
 			"msg": "success",
 		})
 	})
+	InitUserRouters(version.Group("/users"))
+
 }
