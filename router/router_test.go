@@ -10,7 +10,10 @@ import (
 )
 
 func TestInitRouters(t *testing.T) {
-	req, _ := http.NewRequest("GET", "/v1/probe", nil)
+	req, err := http.NewRequest("GET", "/v1/probe", nil)
+	if err != nil {
+		panic(err)
+	}
 	w := httptest.NewRecorder()
 
 	r := gin.Default()
