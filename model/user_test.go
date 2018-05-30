@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/stretchr/testify/assert"
+	"hangmango-web-api/testseed"
 	"testing"
 	"time"
 )
@@ -16,7 +17,7 @@ func TestUserString(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
+	testseed.InitTestDB(DB)
 	user, _ := CreateUser("test", "pass")
-	assert.Equal(t, int(user.Id), 1)
 	assert.Equal(t, user.Email, "test")
 }

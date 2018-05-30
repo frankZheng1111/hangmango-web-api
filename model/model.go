@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // just for test
-	"hangmango-web-api/config"                 // just for test
+	"hangmango-web-api/config"
 	"log"
 	"time"
 )
@@ -35,5 +35,6 @@ func InitModel() {
 		DB.AutoMigrate(&User{})
 		log.Println("AutoMigrate test db")
 	}
+
 	log.Println("Init Model Complete")
 }

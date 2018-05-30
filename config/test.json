@@ -4,7 +4,7 @@
   },
   "gorm": {
     "driver": "sqlite3",
-    "open": "test.db",
+    "open": "/tmp/hangmango-web-api-test.db",
     "maxIdle": 10,
     "maxOpen": 100
   }
