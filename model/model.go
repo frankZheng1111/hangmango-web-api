@@ -14,13 +14,6 @@ type Base struct {
 	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
-type User struct {
-	Base
-	Id           uint   `gorm:"column:id; primary_key"`
-	Email        string `gorm:"column:email"`
-	PasswordHash string `gorm:"column:password_hash"`
-}
-
 var DB *gorm.DB
 var err error
 

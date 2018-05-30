@@ -1,5 +1,5 @@
-hash: 361dc1601dcdfce5e9f3b70cde7b948293ebc751505d7b0b5aa90463e9579975
-updated: 2018-05-30T14:32:27.509541538+08:00
+hash: 00cb142b99e5f7b833b1cfb26f01b214fbfce96a00832ccc53164cb46a51611a
+updated: 2018-05-30T18:12:09.98174871+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -8,6 +8,8 @@ imports:
   subpackages:
   - binding
   - render
+- name: github.com/go-sql-driver/mysql
+  version: a0583e0143b1624142adab07e0e97fe106d99561
 - name: github.com/golang/protobuf
   version: b4deda0973fb4c70b50d226b1af49f3da59f5265
   subpackages:
@@ -15,6 +17,7 @@ imports:
 - name: github.com/jinzhu/gorm
   version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
   subpackages:
+  - dialects/mysql
   - dialects/sqlite
 - name: github.com/jinzhu/inflection
   version: 04140366298a54a039076d798123ffa108fff46c
@@ -30,6 +33,11 @@ imports:
   version: f3cacc17c85ecb7f1b6a9e373ee85d1480919868
   subpackages:
   - codec
+- name: golang.org/x/crypto
+  version: ab813273cd59e1333f7ae7bff5d027d4aadf528c
+  subpackages:
+  - bcrypt
+  - blowfish
 - name: golang.org/x/sys
   version: 6f686a352de66814cdd080d970febae7767857a3
   subpackages:
