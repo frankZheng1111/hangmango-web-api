@@ -15,7 +15,7 @@ type User struct {
 }
 
 func (user *User) String() string {
-	return fmt.Sprintf("Id: %d, Email: %s createdAt: %v", user.Id, user.Email, user.CreatedAt.Format(time.RFC3339))
+	return fmt.Sprintf("Id: %d, Email: %s, CreatedAt: %v", user.Id, user.Email, user.CreatedAt.Format(time.RFC3339))
 }
 
 func CreateUser(email string, password string) (user *User, err error) {
