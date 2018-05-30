@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "hangmango-web-api/model"
 	"net/http"
 )
 

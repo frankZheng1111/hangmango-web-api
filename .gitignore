@@ -12,5 +12,10 @@
 *.out
 
 vendor
+
+# gin tool for develop
 gin-bin
+
+# test storege
+*.db
 

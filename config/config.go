@@ -11,12 +11,21 @@ import (
 const PROJECT_NAME string = "hangmango-web-api"
 
 type JSONConfig struct {
-	ProjectName string `toml:"project_name"`
-	Server      Server `toml:"server"`
+	ENV         string
+	ProjectName string
+	Server      Server
+	GORM        GORM
 }
 
 type Server struct {
-	Port int `toml:"port"`
+	Port int
+}
+
+type GORM struct {
+	Driver  string
+	Open    string
+	MaxIdle int
+	MaxOpen int
 }
 
 var Config JSONConfig
@@ -25,9 +34,8 @@ func init() {
 	InitConfig(&Config)
 }
 
-func ConfigFilePath() string {
+func ConfigFilePath(env string) string {
 	var projectGoPath string
-	env := os.Getenv("GOENV")
 	// 在GOPATH 寻找项目存在的那一条路径
 	//
 	goPaths := strings.Split(os.Getenv("GOPATH"), ":")
@@ -41,8 +49,11 @@ func ConfigFilePath() string {
 }
 
 func InitConfig(config *JSONConfig) {
-	filePath := ConfigFilePath()
-	fmt.Println(filePath)
+	env := os.Getenv("GOENV")
+	if env == "" {
+		env = "dev"
+	}
+	filePath := ConfigFilePath(env)
 	file, err := os.Open(filePath)
 	defer file.Close()
 	if err != nil {
@@ -52,4 +63,5 @@ func InitConfig(config *JSONConfig) {
 	if err = decoder.Decode(&config); err != nil {
 		panic(err)
 	}
+	config.ENV = env
 }

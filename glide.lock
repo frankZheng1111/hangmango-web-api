@@ -1,5 +1,5 @@
-hash: 0d0628d285c34766ba5315c43a2fc6a445aee732d2d51840eb330fdf4a38359b
-updated: 2018-05-29T15:25:19.179074343+08:00
+hash: 361dc1601dcdfce5e9f3b70cde7b948293ebc751505d7b0b5aa90463e9579975
+updated: 2018-05-30T14:32:27.509541538+08:00
 imports:
 - name: github.com/gin-contrib/sse
   version: 22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae
@@ -12,8 +12,16 @@ imports:
   version: b4deda0973fb4c70b50d226b1af49f3da59f5265
   subpackages:
   - proto
+- name: github.com/jinzhu/gorm
+  version: 6ed508ec6a4ecb3531899a69cbc746ccf65a4166
+  subpackages:
+  - dialects/sqlite
+- name: github.com/jinzhu/inflection
+  version: 04140366298a54a039076d798123ffa108fff46c
 - name: github.com/mattn/go-isatty
   version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
+- name: github.com/mattn/go-sqlite3
+  version: a72efd674f654961a11ac41aae72c0e43963fe6c
 - name: github.com/stretchr/testify
   version: 12b6f73e6084dad08a7c6e575284b177ecafbc71
   subpackages:

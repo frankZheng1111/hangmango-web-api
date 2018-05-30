@@ -1,5 +1,11 @@
 {
   "server": {
     "port": 8080
+  },
+  "gorm": {
+    "driver": "sqlite3",
+    "open": "test.db",
+    "maxIdle": 10,
+    "maxOpen": 100
   }
 }

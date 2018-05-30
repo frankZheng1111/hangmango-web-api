@@ -1,5 +1,11 @@
 {
   "server": {
     "port": 8080
+  },
+  "gorm": {
+    "driver": "mysql",
+    "open": "root:root@tcp(127.0.0.1:3306)/hangmango_web",
+    "maxIdle": 10,
+    "maxOpen": 100
   }
 }
