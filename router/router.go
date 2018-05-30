@@ -12,5 +12,4 @@ func InitRouters(version *gin.RouterGroup) {
 		})
 	})
 	InitUserRouters(version.Group("/users"))
-
 }
