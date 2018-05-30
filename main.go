@@ -4,17 +4,14 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"hangmango-web-api/config"
-	"net/http"
+	"hangmango-web-api/router"
 )
 
 func main() {
-	router := gin.Default()
+	ginRouter := gin.Default()
 
-	router.GET("/probe", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "success",
-		})
-	})
+	v1 := ginRouter.Group("/v1")
+	router.InitRouters(v1)
 
-	router.Run(fmt.Sprintf(":%d", config.Config.Server.Port))
+	ginRouter.Run(fmt.Sprintf(":%d", config.Config.Server.Port))
 }
