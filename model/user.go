@@ -20,10 +20,7 @@ func (user *User) String() string {
 
 func CreateUser(email string, password string) (user *User, err error) {
 	saltKey := "qwert"
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password+saltKey), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, err
-	}
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password+saltKey), bcrypt.DefaultCost)
 	result := DB.Create(&User{Email: email, PasswordHash: string(hashedPassword)})
 	err = result.Error
 	if err != nil {
