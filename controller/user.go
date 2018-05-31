@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	db "hangmango-web-api/model"
-	_ "hangmango-web-api/serializer"
+	"hangmango-web-api/serializer"
 	"net/http"
 	"strings"
 )
@@ -23,13 +23,7 @@ func SignUpUser(c *gin.Context) {
 		})
 		return
 	}
-	var res struct {
-		TotalCount int        `json:"total_count"`
-		Data       []*db.User `json:"data"`
-	}
 	user, _ := db.CreateUser(signUpBody.LoginName, signUpBody.Password)
-	res.TotalCount = 1
-	res.Data = []*db.User{user}
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
 	return
 }
