@@ -10,7 +10,7 @@ import (
 type User struct {
 	Base
 	Id           uint   `gorm:"column:id; primary_key"`
-	LoginName    string `gorm:"column:email"`
+	LoginName    string `gorm:"column:login_name"`
 	PasswordHash string `gorm:"column:password_hash"`
 }
 
