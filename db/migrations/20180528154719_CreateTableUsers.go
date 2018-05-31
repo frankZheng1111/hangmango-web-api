@@ -9,7 +9,7 @@ func Up_20180528154719(txn *sql.Tx) {
 	if _, err := txn.Exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id INT UNSIGNED AUTO_INCREMENT,
-		email VARCHAR(50) NOT NULL UNIQUE,
+		login_name VARCHAR(50) NOT NULL UNIQUE,
 		password_hash VARCHAR(100) NOT NULL,
 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -19,7 +19,7 @@ func Up_20180528154719(txn *sql.Tx) {
 	}
 	if _, err := txn.Exec(`
 	CREATE INDEX password_login_index
-	ON users (email, password_hash)
+	ON users (login_name, password_hash)
 	`); err != nil {
 		panic(err)
 	}

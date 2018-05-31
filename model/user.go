@@ -10,18 +10,18 @@ import (
 type User struct {
 	Base
 	Id           uint   `gorm:"column:id; primary_key"`
-	Email        string `gorm:"column:email"`
+	LoginName    string `gorm:"column:email"`
 	PasswordHash string `gorm:"column:password_hash"`
 }
 
 func (user *User) String() string {
-	return fmt.Sprintf("Id: %d, Email: %s, CreatedAt: %v", user.Id, user.Email, user.CreatedAt.Format(time.RFC3339))
+	return fmt.Sprintf("Id: %d, LoginName: %s, CreatedAt: %v", user.Id, user.LoginName, user.CreatedAt.Format(time.RFC3339))
 }
 
-func CreateUser(email string, password string) (user *User, err error) {
+func CreateUser(loginName string, password string) (user *User, err error) {
 	saltKey := "qwert"
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password+saltKey), bcrypt.DefaultCost)
-	result := DB.Create(&User{Email: email, PasswordHash: string(hashedPassword)})
+	result := DB.Create(&User{LoginName: loginName, PasswordHash: string(hashedPassword)})
 	err = result.Error
 	if err != nil {
 		return nil, err
