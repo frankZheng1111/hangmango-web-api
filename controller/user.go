@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	db "hangmango-web-api/model"
+	_ "hangmango-web-api/serializer"
 	"net/http"
 	"strings"
 )
