@@ -7,9 +7,7 @@ import (
 
 func InitRouters(version *gin.RouterGroup) {
 	version.GET("/probe", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "success",
-		})
+		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
 	InitUserRouters(version.Group("/users"))
 }

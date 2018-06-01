@@ -7,12 +7,8 @@ import (
 )
 
 func InitUserRouters(userGroup *gin.RouterGroup) {
-	userGroup.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"total_count": 0,
-			"data":        []int{},
-		})
+	userGroup.GET("/probe", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
-
 	userGroup.POST("/", controller.SignUpUser)
 }
