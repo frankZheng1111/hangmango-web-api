@@ -11,4 +11,5 @@ func InitUserRouters(userGroup *gin.RouterGroup) {
 		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
 	userGroup.POST("/", controller.UserSignUp)
+	userGroup.POST("/signin", controller.UserSignIn)
 }

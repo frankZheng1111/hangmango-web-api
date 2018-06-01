@@ -8,6 +8,13 @@ import (
 	"strings"
 )
 
+func UserSignIn(c *gin.Context) {
+	user, _ := db.UserLogin("test", "password")
+	c.JSON(http.StatusOK, gin.H{
+		"msg": user.LoginName,
+	})
+	return
+}
 func UserSignUp(c *gin.Context) {
 	var signUpBody struct {
 		LoginName string `json:"login_name" binding:"required"`
