@@ -9,12 +9,30 @@ import (
 )
 
 func UserSignIn(c *gin.Context) {
-	user, _ := db.UserLogin("test", "password")
-	c.JSON(http.StatusOK, gin.H{
-		"msg": user.LoginName,
-	})
+	var signUpBody struct {
+		LoginName string `json:"login_name" binding:"required"`
+		Password  string `json:"password" binding:"required"`
+	}
+
+	if err := c.BindJSON(&signUpBody); err != nil {
+		if !strings.Contains(err.Error(), "validation") {
+			panic(err)
+		}
+		ValidationErrorResponse(c)
+		return
+	}
+
+	user, err := db.UserLogin(signUpBody.LoginName, signUpBody.Password)
+	if err != nil {
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "LoginFail",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
 	return
 }
+
 func UserSignUp(c *gin.Context) {
 	var signUpBody struct {
 		LoginName string `json:"login_name" binding:"required"`
