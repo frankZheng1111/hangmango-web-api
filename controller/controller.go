@@ -6,7 +6,7 @@ import (
 )
 
 func ValidationErrorResponse(c *gin.Context) {
-	c.JSON(http.StatusUnprocessableEntity, gin.H{
+	c.JSON(http.StatusBadRequest, gin.H{
 		"msg": "ParamsValidationError",
 	})
 	return

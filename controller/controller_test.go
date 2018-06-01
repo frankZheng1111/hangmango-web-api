@@ -26,6 +26,6 @@ func TestValidationErrorResponse(t *testing.T) {
 		panic(err)
 	}
 
-	assert.Equal(t, 422, w.Code)
+	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, "ParamsValidationError", respJson["msg"])
 }
