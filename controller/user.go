@@ -8,21 +8,29 @@ import (
 	"strings"
 )
 
-func UserSignIn(c *gin.Context) {
-	var signUpBody struct {
-		LoginName string `json:"login_name" binding:"required"`
-		Password  string `json:"password" binding:"required"`
-	}
+type LoginInfo struct {
+	LoginName string `json:"login_name" binding:"required"`
+	Password  string `json:"password" binding:"required"`
+}
 
-	if err := c.BindJSON(&signUpBody); err != nil {
+func bindUserLoginInfo(c *gin.Context) (loginInfo *LoginInfo, err error) {
+	loginInfo = new(LoginInfo)
+	if err = c.BindJSON(loginInfo); err != nil {
 		if !strings.Contains(err.Error(), "validation") {
 			panic(err)
 		}
 		ValidationErrorResponse(c)
+	}
+	return
+}
+
+func UserSignIn(c *gin.Context) {
+	signInBody, err := bindUserLoginInfo(c)
+	if err != nil {
 		return
 	}
 
-	user, err := db.UserLogin(signUpBody.LoginName, signUpBody.Password)
+	user, err := db.UserLogin(signInBody.LoginName, signInBody.Password)
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{
 			"msg": "LoginFail",
@@ -34,18 +42,11 @@ func UserSignIn(c *gin.Context) {
 }
 
 func UserSignUp(c *gin.Context) {
-	var signUpBody struct {
-		LoginName string `json:"login_name" binding:"required"`
-		Password  string `json:"password" binding:"required"`
-	}
-
-	if err := c.BindJSON(&signUpBody); err != nil {
-		if !strings.Contains(err.Error(), "validation") {
-			panic(err)
-		}
-		ValidationErrorResponse(c)
+	signUpBody, err := bindUserLoginInfo(c)
+	if err != nil {
 		return
 	}
+
 	user, err := db.CreateUser(signUpBody.LoginName, signUpBody.Password)
 	if err != nil {
 		if !strings.Contains(err.Error(), "Duplicate entry") {
