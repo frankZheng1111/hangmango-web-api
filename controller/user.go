@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func SignUpUser(c *gin.Context) {
+func UserSignUp(c *gin.Context) {
 	var signUpBody struct {
 		LoginName string `json:"login_name" binding:"required"`
 		Password  string `json:"password" binding:"required"`

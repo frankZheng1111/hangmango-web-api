@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestSignUpUser(t *testing.T) {
+func TestUserSignUp(t *testing.T) {
 	reqFail, err := http.NewRequest("POST", "/test", strings.NewReader("{}"))
 	reqSuccess, err := http.NewRequest("POST", "/test", strings.NewReader(`{"login_name": "nameUser", "password": "pass"}`))
 	if err != nil {
@@ -19,7 +19,7 @@ func TestSignUpUser(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	r := gin.Default()
-	r.POST("/test", SignUpUser)
+	r.POST("/test", UserSignUp)
 	r.ServeHTTP(w, reqFail)
 
 	var respJson map[string]interface{}

@@ -10,5 +10,5 @@ func InitUserRouters(userGroup *gin.RouterGroup) {
 	userGroup.GET("/probe", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
-	userGroup.POST("/", controller.SignUpUser)
+	userGroup.POST("/", controller.UserSignUp)
 }
