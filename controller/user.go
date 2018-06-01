@@ -18,12 +18,19 @@ func SignUpUser(c *gin.Context) {
 		if !strings.Contains(err.Error(), "validation") {
 			panic(err)
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "params validation error",
+		ValidationErrorResponse(c)
+		return
+	}
+	user, err := db.CreateUser(signUpBody.LoginName, signUpBody.Password)
+	if err != nil {
+		if !strings.Contains(err.Error(), "Duplicate entry") {
+			panic(err)
+		}
+		c.JSON(http.StatusForbidden, gin.H{
+			"msg": "UserAlreadyExist",
 		})
 		return
 	}
-	user, _ := db.CreateUser(signUpBody.LoginName, signUpBody.Password)
 	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
 	return
 }
