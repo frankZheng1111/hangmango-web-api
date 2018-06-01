@@ -8,16 +8,16 @@ import (
 func TestConfigFilePath(t *testing.T) {
 	expectPathRune := []rune(ConfigFilePath("test"))
 	expectPathRune = expectPathRune[len(expectPathRune)-16:]
-	assert.Equal(t, string(expectPathRune), "config/test.json")
+	assert.Equal(t, "config/test.json", string(expectPathRune))
 }
 
 func TestInitConfig(t *testing.T) {
 	var testConfig JSONConfig
 	InitConfig(&testConfig)
-	assert.Equal(t, testConfig.Server.Port, 8080)
-	assert.Equal(t, testConfig.GORM.Open, "/tmp/hangmango-web-api-test.db")
-	assert.Equal(t, testConfig.GORM.Driver, "sqlite3")
-	assert.Equal(t, testConfig.GORM.MaxOpen, 100)
-	assert.Equal(t, testConfig.GORM.MaxIdle, 10)
-	assert.Equal(t, testConfig.ENV, "test")
+	assert.Equal(t, 8080, testConfig.Server.Port)
+	assert.Equal(t, "/tmp/hangmango-web-api-test.db", testConfig.GORM.Open)
+	assert.Equal(t, "sqlite3", testConfig.GORM.Driver)
+	assert.Equal(t, 100, testConfig.GORM.MaxOpen)
+	assert.Equal(t, 10, testConfig.GORM.MaxIdle)
+	assert.Equal(t, "test", testConfig.ENV)
 }

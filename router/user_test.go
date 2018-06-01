@@ -22,12 +22,12 @@ func TestInitUserRouters(t *testing.T) {
 
 	r.ServeHTTP(w, req)
 
-	assert.Equal(t, w.Code, 200)
+	assert.Equal(t, 200, w.Code)
 
 	var respJson map[string]interface{}
 	decoder := json.NewDecoder(w.Body)
 	if err := decoder.Decode(&respJson); err != nil {
 		panic(err)
 	}
-	assert.Equal(t, respJson["msg"], "success")
+	assert.Equal(t, "success", respJson["msg"])
 }
