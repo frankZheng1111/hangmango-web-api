@@ -32,7 +32,7 @@ func UserSignIn(c *gin.Context) {
 
 	user, err := db.UserLogin(signInBody.LoginName, signInBody.Password)
 	if err != nil {
-		c.JSON(http.StatusForbidden, gin.H{
+		c.JSON(http.StatusUnauthorized, gin.H{
 			"msg": "LoginFail",
 		})
 		return
