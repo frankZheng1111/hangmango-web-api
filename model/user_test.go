@@ -25,6 +25,14 @@ func TestCreateUser(t *testing.T) {
 func TestUserLogin(t *testing.T) {
 	testseed.InitTestDB(DB)
 	CreateUser("test", "pass")
-	_, err := UserLogin("test", "wrongPass")
+	var err error
+
+	_, err = UserLogin("test", "wrongPass")
 	assert.Equal(t, "crypto/bcrypt: hashedPassword is not the hash of the given password", err.Error())
+
+	_, err = UserLogin("wrongTest", "wrongPass")
+	assert.Equal(t, "record not found", err.Error())
+
+	user, _ := UserLogin("test", "pass")
+	assert.Equal(t, "test", user.LoginName)
 }
