@@ -37,6 +37,7 @@ func UserSignIn(c *gin.Context) {
 		})
 		return
 	}
+	SetSession(c, "userId", user.Id)
 	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
 	return
 }

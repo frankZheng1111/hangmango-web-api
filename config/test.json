@@ -7,5 +7,12 @@
     "open": "/tmp/hangmango-web-api-test.db",
     "maxIdle": 10,
     "maxOpen": 100
+  },
+  "redis": {
+    "maxIdle": 10,
+    "network": "tcp",
+    "address": "127.0.0.1:6379",
+    "password": "",
+    "authKey": "test-session"
   }
 }

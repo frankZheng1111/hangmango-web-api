@@ -10,3 +10,6 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - bcrypt
+- package: github.com/gin-contrib/sessions
+- package: github.com/boj/redistore
+  version: ^1.2.0

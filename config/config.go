@@ -15,6 +15,7 @@ type JSONConfig struct {
 	ProjectName string
 	Server      Server
 	GORM        GORM
+	Redis       Redis
 }
 
 type Server struct {
@@ -26,6 +27,14 @@ type GORM struct {
 	Open    string
 	MaxIdle int
 	MaxOpen int
+}
+
+type Redis struct {
+	MaxIdle  int
+	Network  string
+	Address  string
+	Password string
+	AuthKey  string
 }
 
 var Config JSONConfig
