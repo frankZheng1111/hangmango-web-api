@@ -4,7 +4,7 @@
   },
   "gorm": {
     "driver": "mysql",
-    "open": "root:root@tcp(127.0.0.1:3306)/hangmango_web?parseTime=true",
+    "open": "root:root@tcp(127.0.0.1:3306)/hangmango_web?parseTime=true&charset=utf8mb4",
     "maxIdle": 10,
     "maxOpen": 100
   }

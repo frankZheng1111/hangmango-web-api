@@ -23,6 +23,11 @@ func Up_20180528154719(txn *sql.Tx) {
 	`); err != nil {
 		panic(err)
 	}
+	if _, err := txn.Exec(`
+	ALTER TABLE users CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+	`); err != nil {
+		panic(err)
+	}
 }
 
 // Down is executed when this migration is rolled back
