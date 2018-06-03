@@ -73,3 +73,8 @@ func UserSignUp(c *gin.Context) {
 	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
 	return
 }
+
+func GetBestUsers(c *gin.Context) {
+	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(0, []*db.User{}))
+	return
+}

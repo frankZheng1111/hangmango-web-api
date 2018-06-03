@@ -12,4 +12,5 @@ func InitUserRouters(userGroup *gin.RouterGroup) {
 	})
 	userGroup.POST("/", controller.UserSignUp)
 	userGroup.POST("/signin", controller.UserSignIn)
+	userGroup.GET("/best-users", controller.GetBestUsers)
 }

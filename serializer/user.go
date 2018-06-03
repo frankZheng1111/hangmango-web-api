@@ -21,6 +21,7 @@ type BaseUserResource struct {
 func SerializeBaseUsers(count int, users []*db.User) *BaseUserResource {
 	baseUserResource := new(BaseUserResource)
 	baseUserResource.TotalCount = count
+	baseUserResource.Data = []*BaseUser{}
 
 	for _, user := range users {
 		baseUser := new(BaseUser)
