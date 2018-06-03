@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,42 @@ import (
 )
 
 var loginSecretKey string = "secret-hangmango-web-key" + config.Config.ENV
+
+func ValidAuthToken(c *gin.Context) {
+	tokenString := c.Request.Header.Get("hangmango-auth-token")
+	if tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"msg": "NeedAuthToken",
+		})
+		c.Abort()
+		return
+	}
+
+	type AuthClaims struct {
+		UserId uint `json:"userId"`
+		Exp    int  `json:"exp"`
+		Iat    int  `json:"iat"`
+		jwt.StandardClaims
+	}
+
+	token, err := jwt.ParseWithClaims(tokenString, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(loginSecretKey), nil
+	})
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"msg": "TokenAuthFail",
+		})
+		c.Abort()
+		return
+	}
+	fmt.Println(token.Claims)
+	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
+		fmt.Printf("%v %v", claims.UserId, claims.Exp, claims.Iat, claims.StandardClaims.ExpiresAt)
+	} else {
+		fmt.Println(err)
+	}
+	c.Next()
+}
 
 func ValidationErrorResponse(c *gin.Context) {
 	c.JSON(http.StatusBadRequest, gin.H{
