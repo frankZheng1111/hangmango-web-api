@@ -5,7 +5,6 @@ import (
 	db "hangmango-web-api/model"
 	"hangmango-web-api/serializer"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -76,12 +75,7 @@ func UserSignUp(c *gin.Context) {
 }
 
 func GetBestUsers(c *gin.Context) {
-	paginate := new(db.Paginate)
-	page := c.Query("page")
-	pageSize := c.Query("page_size")
-	paginate.Page, _ = strconv.Atoi(page)
-	paginate.PageSize, _ = strconv.Atoi(pageSize)
-	count, users, err := db.GetBestUsers(paginate)
+	count, users, err := db.GetBestUsers(ParsePaginateFromQuery(c))
 	if err != nil {
 		panic(err)
 	}

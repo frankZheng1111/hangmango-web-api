@@ -5,7 +5,9 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"hangmango-web-api/config"
+	db "hangmango-web-api/model"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -28,6 +30,15 @@ func GenerateLoginToken(userId uint) (string, error) {
 	tokenString, err := token.SignedString([]byte(loginSecretKey))
 
 	return tokenString, err
+}
+
+func ParsePaginateFromQuery(c *gin.Context) *db.Paginate {
+	paginate := new(db.Paginate)
+	page := c.Query("page")
+	pageSize := c.Query("page_size")
+	paginate.Page, _ = strconv.Atoi(page)
+	paginate.PageSize, _ = strconv.Atoi(pageSize)
+	return paginate
 }
 
 func SetSession(c *gin.Context, key string, value interface{}) {
