@@ -14,6 +14,21 @@ type Base struct {
 	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
+type Paginate struct {
+	Page     int
+	PageSize int
+}
+
+func (paginate *Paginate) ParseToLimitAndOffset() (limit int, offset int) {
+	if 0 >= paginate.Page || 0 >= paginate.PageSize {
+		paginate.Page = 1
+		paginate.PageSize = 30
+	}
+	limit = paginate.PageSize
+	offset = (paginate.Page - 1) * paginate.PageSize
+	return
+}
+
 var DB *gorm.DB
 var err error
 
