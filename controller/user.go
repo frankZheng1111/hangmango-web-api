@@ -37,8 +37,20 @@ func UserSignIn(c *gin.Context) {
 		})
 		return
 	}
-	SetSession(c, "userId", user.Id)
-	c.JSON(http.StatusOK, serializer.SerializeBaseUsers(1, []*db.User{user}))
+	// SetSession(c, "userId", user.Id)
+	token, err := GenerateLoginToken(user.Id)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"msg": "LoginFail",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user_id": user.Id,
+		"token":   token,
+	})
 	return
 }
 

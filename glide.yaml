@@ -13,3 +13,5 @@ import:
 - package: github.com/gin-contrib/sessions
 - package: github.com/boj/redistore
   version: ^1.2.0
+- package: github.com/dgrijalva/jwt-go
+  version: ^3.2.0

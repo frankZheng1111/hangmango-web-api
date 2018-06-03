@@ -1,8 +1,10 @@
-hash: eeccc7ee2c629a27d467fc796c0bb660c7e858e552f41537c93bff39537efc18
-updated: 2018-06-02T20:56:22.163095131+08:00
+hash: fcec8b55efa8bee4c7285b660740922706c529b2f8310e52e7b773c5f1011194
+updated: 2018-06-03T12:22:10.706625573+08:00
 imports:
 - name: github.com/boj/redistore
   version: fc113767cd6b051980f260d6dbe84b2740c46ab0
+- name: github.com/dgrijalva/jwt-go
+  version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
 - name: github.com/garyburd/redigo
   version: 569eae59ada904ea8db7a225c2b47165af08735a
   subpackages:
