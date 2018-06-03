@@ -26,8 +26,8 @@ func ValidAuthToken(c *gin.Context) {
 
 	type AuthClaims struct {
 		UserId uint `json:"userId"`
-		Exp    int  `json:"exp"`
-		Iat    int  `json:"iat"`
+		// Exp    int  `json:"exp"`
+		// Iat    int  `json:"iat"`
 		jwt.StandardClaims
 	}
 
@@ -41,9 +41,8 @@ func ValidAuthToken(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	fmt.Println(token.Claims)
 	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
-		fmt.Printf("%v %v", claims.UserId, claims.Exp, claims.Iat, claims.StandardClaims.ExpiresAt)
+		fmt.Println(claims.UserId, claims.StandardClaims.ExpiresAt, claims.StandardClaims.IssuedAt)
 	} else {
 		fmt.Println(err)
 	}
