@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -12,10 +11,16 @@ import (
 	"time"
 )
 
+type AuthClaims struct {
+	UserId uint `json:"userId"`
+	jwt.StandardClaims
+}
+
 var loginSecretKey string = "secret-hangmango-web-key" + config.Config.ENV
 
 func ValidAuthToken(c *gin.Context) {
 	tokenString := c.Request.Header.Get("hangmango-auth-token")
+
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"msg": "NeedAuthToken",
@@ -24,16 +29,10 @@ func ValidAuthToken(c *gin.Context) {
 		return
 	}
 
-	type AuthClaims struct {
-		UserId uint `json:"userId"`
-		// Exp    int  `json:"exp"`
-		// Iat    int  `json:"iat"`
-		jwt.StandardClaims
-	}
-
 	token, err := jwt.ParseWithClaims(tokenString, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(loginSecretKey), nil
 	})
+
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"msg": "TokenAuthFail",
@@ -41,11 +40,9 @@ func ValidAuthToken(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
-		fmt.Println(claims.UserId, claims.StandardClaims.ExpiresAt, claims.StandardClaims.IssuedAt)
-	} else {
-		fmt.Println(err)
-	}
+	// 解析相关信息
+	claims, _ := token.Claims.(*AuthClaims)
+	c.Set("UserId", claims.UserId)
 	c.Next()
 }
 
