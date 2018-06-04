@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,11 +12,13 @@ import (
 const PROJECT_NAME string = "hangmango-web-api"
 
 type JSONConfig struct {
-	ENV         string
-	ProjectName string
-	Server      Server
-	GORM        GORM
-	Redis       Redis
+	ENV            string
+	ProjectName    string
+	Dictionary     []string
+	DictionaryName string
+	Server         Server
+	GORM           GORM
+	Redis          Redis
 }
 
 type Server struct {
@@ -43,7 +46,7 @@ func init() {
 	InitConfig(&Config)
 }
 
-func ConfigFilePath(env string) string {
+func (config *JSONConfig) ConfigFolderPath() string {
 	var projectGoPath string
 	// 在GOPATH 寻找项目存在的那一条路径
 	//
@@ -54,7 +57,23 @@ func ConfigFilePath(env string) string {
 			break
 		}
 	}
-	return filepath.Join(projectGoPath, "src", PROJECT_NAME, "config", fmt.Sprintf("%s.json", env))
+	return filepath.Join(projectGoPath, "src", PROJECT_NAME, "config")
+}
+
+func (config *JSONConfig) ConfigFilePath(env string) string {
+	return filepath.Join(config.ConfigFolderPath(), fmt.Sprintf("%s.json", env))
+}
+
+func (config *JSONConfig) InitDictionary() error {
+	dictionaryPath := filepath.Join(config.ConfigFolderPath(), config.DictionaryName)
+	content, err := ioutil.ReadFile(dictionaryPath)
+	if err != nil {
+		return err
+	}
+	for _, letter := range strings.Split(string(content), "\n") {
+		config.Dictionary = append(config.Dictionary, strings.ToLower(letter))
+	}
+	return nil
 }
 
 func InitConfig(config *JSONConfig) {
@@ -62,7 +81,9 @@ func InitConfig(config *JSONConfig) {
 	if env == "" {
 		env = "dev"
 	}
-	filePath := ConfigFilePath(env)
+	config.ENV = env
+
+	filePath := config.ConfigFilePath(env)
 	file, err := os.Open(filePath)
 	defer file.Close()
 	if err != nil {
@@ -72,5 +93,7 @@ func InitConfig(config *JSONConfig) {
 	if err = decoder.Decode(&config); err != nil {
 		panic(err)
 	}
-	config.ENV = env
+	if err = config.InitDictionary(); err != nil {
+		panic(err)
+	}
 }

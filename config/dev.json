@@ -2,6 +2,7 @@
   "server": {
     "port": 8080
   },
+  "dictionaryName": "dictionary.txt",
   "gorm": {
     "driver": "mysql",
     "open": "root:root@tcp(127.0.0.1:3306)/hangmango_web?parseTime=true&charset=utf8mb4",
