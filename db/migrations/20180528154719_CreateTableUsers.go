@@ -18,8 +18,8 @@ func Up_20180528154719(txn *sql.Tx) {
 		panic(err)
 	}
 	if _, err := txn.Exec(`
-	CREATE INDEX password_login_index
-	ON users (login_name, password_hash)
+	CREATE INDEX login_name_index
+	ON users (login_name)
 	`); err != nil {
 		panic(err)
 	}
