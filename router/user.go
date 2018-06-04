@@ -10,8 +10,8 @@ func InitUserRouters(userGroup *gin.RouterGroup) {
 	userGroup.GET("/probe", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
-	userGroup.POST("/", controller.UserSignUp)
-	userGroup.POST("/signin", controller.UserSignIn)
-	userGroup.Use(controller.ValidAuthToken)
-	userGroup.GET("/best-users", controller.GetBestUsers)
+	userGroup.POST("/", CommonPanicHandle(controller.UserSignUp))
+	userGroup.POST("/signin", CommonPanicHandle(controller.UserSignIn))
+	userGroup.Use(controller.CommonPanicHandle(controller.ValidAuthToken))
+	userGroup.GET("/best-users", CommonPanicHandle(controller.GetBestUsers))
 }

@@ -27,6 +27,7 @@ func CommonPanicHandle(action func(c *gin.Context)) func(c *gin.Context) {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"msg": "SERVER_ERROR",
 				})
+				c.Abort()
 			}
 		}()
 		action(c)
