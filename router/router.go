@@ -10,4 +10,5 @@ func InitRouters(version *gin.RouterGroup) {
 		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
 	InitUserRouters(version.Group("/users"))
+	InitHangmanRouters(version.Group("/hangmen"))
 }

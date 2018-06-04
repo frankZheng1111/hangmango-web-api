@@ -12,7 +12,7 @@ type Hangman struct {
 	Id     uint   `gorm:"column:id; primary_key"`
 	UserId uint   `gorm:"column:user_id"`
 	Word   string `gorm:"column:word"`
-	Status string `gorm:"column:status"`
+	Status string `gorm:"column:status;default:PLAYING"`
 }
 
 func StartNewGame(userId uint) (gameStr string, err error) {
