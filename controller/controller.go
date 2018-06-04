@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"hangmango-web-api/config"
 	db "hangmango-web-api/model"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -17,6 +18,20 @@ type AuthClaims struct {
 }
 
 var loginSecretKey string = "secret-hangmango-web-key" + config.Config.ENV
+
+func CommonPanicHandle(action func(c *gin.Context)) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Println("Error: ", time.Now(), err)
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"msg": "SERVER_ERROR",
+				})
+			}
+		}()
+		action(c)
+	}
+}
 
 func ValidAuthToken(c *gin.Context) {
 	tokenString := c.Request.Header.Get("hangmango-auth-token")

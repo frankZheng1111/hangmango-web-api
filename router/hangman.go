@@ -11,5 +11,5 @@ func InitHangmanRouters(userGroup *gin.RouterGroup) {
 		c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	})
 	userGroup.Use(controller.ValidAuthToken)
-	userGroup.POST("/", controller.StartNewGame)
+	userGroup.POST("/", CommonPanicHandle(controller.StartNewGame))
 }
