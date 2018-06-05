@@ -12,17 +12,22 @@ import (
 const PROJECT_NAME string = "hangmango-web-api"
 
 type JSONConfig struct {
-	ENV            string
-	ProjectName    string
-	Dictionary     []string
-	DictionaryName string
-	Server         Server
-	GORM           GORM
-	Redis          Redis
+	ENV         string
+	ProjectName string
+	Server      Server
+	GORM        GORM
+	Redis       Redis
+	Hangman     Hangman
 }
 
 type Server struct {
 	Port int
+}
+
+type Hangman struct {
+	Hp             int
+	Dictionary     []string
+	DictionaryName string
 }
 
 type GORM struct {
@@ -65,13 +70,13 @@ func (config *JSONConfig) ConfigFilePath(env string) string {
 }
 
 func (config *JSONConfig) InitDictionary() error {
-	dictionaryPath := filepath.Join(config.ConfigFolderPath(), config.DictionaryName)
+	dictionaryPath := filepath.Join(config.ConfigFolderPath(), config.Hangman.DictionaryName)
 	content, err := ioutil.ReadFile(dictionaryPath)
 	if err != nil {
 		return err
 	}
 	for _, letter := range strings.Split(string(content), "\n") {
-		config.Dictionary = append(config.Dictionary, strings.ToLower(letter))
+		config.Hangman.Dictionary = append(config.Hangman.Dictionary, strings.ToLower(letter))
 	}
 	return nil
 }

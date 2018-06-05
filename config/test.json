@@ -2,7 +2,10 @@
   "server": {
     "port": 8080
   },
-  "dictionaryName": "dictionary_test.txt",
+  "hangman": {
+    "hp": 1,
+    "dictionaryName": "dictionary_test.txt"
+  },
   "gorm": {
     "driver": "sqlite3",
     "open": "/tmp/hangmango-web-api-test.db",

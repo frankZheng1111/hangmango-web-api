@@ -18,8 +18,8 @@ type Hangman struct {
 func StartNewGame(userId uint) (gameStr string, err error) {
 	source := rand.NewSource(time.Now().Unix())
 	randMachine := rand.New(source)
-	randIndex := randMachine.Intn(len(config.Config.Dictionary) - 1)
-	word := config.Config.Dictionary[randIndex]
+	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
+	word := config.Config.Hangman.Dictionary[randIndex]
 	err = DB.Create(&Hangman{UserId: userId, Word: word}).Error
 	if err != nil {
 		return
