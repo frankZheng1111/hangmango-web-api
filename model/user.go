@@ -11,13 +11,31 @@ const PASSWORD_SALT_KEY string = "qwert"
 
 type User struct {
 	Base
-	Id           uint   `gorm:"column:id; primary_key"`
-	LoginName    string `gorm:"column:login_name"`
-	PasswordHash string `gorm:"column:password_hash"`
+	Id           uint      `gorm:"column:id; primary_key"`
+	LoginName    string    `gorm:"column:login_name"`
+	PasswordHash string    `gorm:"column:password_hash"`
+	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
 }
 
 func (user *User) String() string {
 	return fmt.Sprintf("Id: %d, LoginName: %s, CreatedAt: %v", user.Id, user.LoginName, user.CreatedAt.Format(time.RFC3339))
+}
+
+func (user *User) HangmenById(id uint) (hangmen *Hangman, err error) {
+	err = DB.Where(&Hangman{Id: id, UserId: user.Id}).First(&hangmen).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func GetUserById(id uint) (user *User, err error) {
+	user = new(User)
+	err = DB.Where(&User{Id: id}).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return
 }
 
 func CreateUser(loginName string, password string) (user *User, err error) {
