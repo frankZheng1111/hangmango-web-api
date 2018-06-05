@@ -21,8 +21,9 @@ func (user *User) String() string {
 	return fmt.Sprintf("Id: %d, LoginName: %s, CreatedAt: %v", user.Id, user.LoginName, user.CreatedAt.Format(time.RFC3339))
 }
 
-func (user *User) HangmenById(id uint) (hangmen *Hangman, err error) {
-	err = DB.Where(&Hangman{Id: id, UserId: user.Id}).First(&hangmen).Error
+func (user *User) HangmenById(id uint) (hangman *Hangman, err error) {
+	hangman = new(Hangman)
+	err = DB.Where(&Hangman{Id: id, UserId: user.Id}).First(&hangman).Error
 	if err != nil {
 		return nil, err
 	}
