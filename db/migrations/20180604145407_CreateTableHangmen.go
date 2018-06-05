@@ -32,7 +32,7 @@ func Up_20180604145407(txn *sql.Tx) {
 	}
 
 	if _, err := txn.Exec(`
-	CREATE TABLE IF NOT EXISTS hangman_guessed_letter (
+	CREATE TABLE IF NOT EXISTS hangman_guessed_letters (
 		id INT UNSIGNED AUTO_INCREMENT,
 		hangman_id INT UNSIGNED NOT NULL,
 		letter VARCHAR(1) NOT NULL,
@@ -44,7 +44,7 @@ func Up_20180604145407(txn *sql.Tx) {
 	}
 	if _, err := txn.Exec(`
 	CREATE INDEX hangman_id_index
-	ON hangman_guessed_letter(hangman_id);
+	ON hangman_guessed_letters(hangman_id);
 	`); err != nil {
 		panic(err)
 	}
@@ -53,6 +53,9 @@ func Up_20180604145407(txn *sql.Tx) {
 // Down is executed when this migration is rolled back
 func Down_20180604145407(txn *sql.Tx) {
 	if _, err := txn.Exec(`DROP TABLE hangmen;`); err != nil {
+		panic(err)
+	}
+	if _, err := txn.Exec(`DROP TABLE hangman_guessed_letters;`); err != nil {
 		panic(err)
 	}
 }
