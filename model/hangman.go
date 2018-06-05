@@ -9,10 +9,21 @@ import (
 
 type Hangman struct {
 	Base
-	Id     uint   `gorm:"column:id; primary_key"`
-	UserId uint   `gorm:"column:user_id"`
-	Word   string `gorm:"column:word"`
-	Status string `gorm:"column:status;default:PLAYING"`
+	Id                   uint   `gorm:"column:id; primary_key"`
+	UserId               uint   `gorm:"column:user_id"`
+	Word                 string `gorm:"column:word"`
+	Status               string `gorm:"column:status;default:PLAYING"`
+	HangmenGuessedLetter []HangmanGuessedLetter
+}
+
+func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuessedLetter, err error) {
+	result := DB.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
+	err = result.Error
+	if err != nil {
+		return
+	}
+	hangmanGuessedLetter = result.Value.(*HangmanGuessedLetter) // must be ptr
+	return
 }
 
 func StartNewGame(userId uint) (gameStr string, err error) {
