@@ -2,8 +2,11 @@ package controller
 
 import (
 	"encoding/json"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	db "hangmango-web-api/model"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -108,5 +111,38 @@ func TestValidAuthToken(t *testing.T) {
 	r.ServeHTTP(w, reqWithValidToken)
 	userId, _ := resultC.Get("UserId")
 	assert.Equal(t, uint(1), userId)
+}
 
+func TestParsePaginateFromQuery(t *testing.T) {
+	var paginate *db.Paginate
+	req, err := http.NewRequest("GET", "/test?page=2&page_size=19", nil)
+	if err != nil {
+		panic(err)
+	}
+	r := gin.Default()
+	r.GET("/test", func(c *gin.Context) {
+		paginate = ParsePaginateFromQuery(c)
+	})
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, 2, paginate.Page)
+	assert.Equal(t, 19, paginate.PageSize)
+}
+
+func TestGetAndSession(t *testing.T) {
+	var sessionValue string
+	req, err := http.NewRequest("GET", "/test", nil)
+	if err != nil {
+		panic(err)
+	}
+	r := gin.Default()
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("mysession", store))
+	r.GET("/test", func(c *gin.Context) {
+		SetSession(c, "SessionKey", "SessionValue")
+		sessionValue = GetSession(c, "SessionKey").(string)
+	})
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	assert.Equal(t, "SessionValue", sessionValue)
 }
