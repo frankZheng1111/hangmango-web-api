@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/sqlite" // just for test
 	"hangmango-web-api/config"
 	"log"
 	"time"
@@ -44,12 +43,6 @@ func InitModel() {
 
 	DB.DB().SetMaxIdleConns(config.Config.GORM.MaxIdle)
 	DB.DB().SetMaxOpenConns(config.Config.GORM.MaxOpen)
-
-	if config.Config.ENV == "test" {
-		// Migrate the schema
-		DB.AutoMigrate(&User{})
-		log.Println("AutoMigrate test db")
-	}
 
 	log.Println("Init Model Complete")
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	db "hangmango-web-api/model"
-	"hangmango-web-api/testseed"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -17,7 +16,7 @@ func TestUserSignUp(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := gin.Default()
 	r.POST("/test", UserSignUp)
-	testseed.InitTestDB(db.DB)
+	db.InitTestDB(db.DB)
 
 	// test signup fail
 	//
@@ -50,7 +49,7 @@ func TestUserSignUp(t *testing.T) {
 }
 
 func TestUserSignIn(t *testing.T) {
-	testseed.InitTestDB(db.DB)
+	db.InitTestDB(db.DB)
 	reqSuccess, err := http.NewRequest("POST", "/test", strings.NewReader(`{"login_name": "nameUser", "password": "pass"}`))
 	if err != nil {
 		panic(err)
