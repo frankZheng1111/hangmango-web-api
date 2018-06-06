@@ -21,4 +21,7 @@ func InitTestDB(db *gorm.DB) {
 	DB.Delete(&Hangman{})
 	DB.Delete(&HangmanGuessedLetter{})
 
+	DB.Create(&User{Id: 1, LoginName: "test-user-name", PasswordHash: "passwordhash"})
+	DB.Create(&Hangman{Id: 1, UserId: 1, Word: "abandon"})
+	DB.Create(&HangmanGuessedLetter{Id: 1, Letter: "a", HangmanId: 1})
 }
