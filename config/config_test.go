@@ -22,5 +22,5 @@ func TestInitConfig(t *testing.T) {
 	assert.Equal(t, 100, testConfig.GORM.MaxOpen)
 	assert.Equal(t, 10, testConfig.GORM.MaxIdle)
 	assert.Equal(t, "test", testConfig.ENV)
-	assert.Equal(t, "abandon", testConfig.Dictionary[0])
+	assert.Equal(t, "abandon", testConfig.Hangman.Dictionary[0])
 }
