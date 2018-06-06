@@ -33,6 +33,9 @@ func TestUserLogin(t *testing.T) {
 	_, err = UserLogin("wrongTest", "wrongPass")
 	assert.Equal(t, "record not found", err.Error())
 
-	user, _ := UserLogin("test", "pass")
+	user, err := UserLogin("test", "pass")
+	if err != nil {
+		panic(err)
+	}
 	assert.Equal(t, "test", user.LoginName)
 }
