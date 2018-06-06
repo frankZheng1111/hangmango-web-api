@@ -13,34 +13,39 @@ import (
 )
 
 func TestUserSignUp(t *testing.T) {
+	var respJson map[string]interface{}
+	w := httptest.NewRecorder()
+	r := gin.Default()
+	r.POST("/test", UserSignUp)
 	testseed.InitTestDB(db.DB)
+
+	// test signup fail
+	//
 	reqFail, err := http.NewRequest("POST", "/test", strings.NewReader("{}"))
-	reqSuccess, err := http.NewRequest("POST", "/test", strings.NewReader(`{"login_name": "nameUser", "password": "pass"}`))
 	if err != nil {
 		panic(err)
 	}
-	w := httptest.NewRecorder()
-
-	r := gin.Default()
-	r.POST("/test", UserSignUp)
 	r.ServeHTTP(w, reqFail)
-
-	var respJson map[string]interface{}
 	decoder := json.NewDecoder(w.Body)
 	if err := decoder.Decode(&respJson); err != nil {
 		panic(err)
 	}
-
 	assert.Equal(t, 400, w.Code)
 	assert.Equal(t, "ParamsValidationError", respJson["msg"])
 
+	// test signup success
+	//
+	reqSuccess, err := http.NewRequest("POST", "/test", strings.NewReader(`{"login_name": "nameUser", "password": "pass"}`))
+	if err != nil {
+		panic(err)
+	}
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, reqSuccess)
 	decoder = json.NewDecoder(w.Body)
 	if err := decoder.Decode(&respJson); err != nil {
 		panic(err)
 	}
-
+	assert.Equal(t, 1, int(respJson["total_count"].(float64)))
 	assert.Equal(t, 200, w.Code)
 }
 
