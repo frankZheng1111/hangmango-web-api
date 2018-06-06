@@ -83,7 +83,6 @@ func TestValidAuthToken(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	reqWithInvalidToken.Header.Add("hangmango-auth-token", "INVALIDTOKEN")
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, reqWithInvalidToken)
@@ -93,4 +92,21 @@ func TestValidAuthToken(t *testing.T) {
 	}
 	assert.Equal(t, 401, w.Code)
 	assert.Equal(t, "TokenAuthFail", respJson["msg"])
+
+	// test valid token: invalid token
+	//
+	reqWithValidToken, err := http.NewRequest("GET", "/test", nil)
+	if err != nil {
+		panic(err)
+	}
+	validToken, err := GenerateLoginToken(1)
+	if err != nil {
+		panic(err)
+	}
+	reqWithValidToken.Header.Add("hangmango-auth-token", validToken)
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, reqWithValidToken)
+	userId, _ := resultC.Get("UserId")
+	assert.Equal(t, uint(1), userId)
+
 }
