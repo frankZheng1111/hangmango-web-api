@@ -13,8 +13,12 @@ func StartNewGame(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
+	gameStr, err := hangman.GameStr()
+	if err != nil {
+		panic(err)
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"word": hangman.Word,
+		"word": gameStr,
 	})
 	return
 }
