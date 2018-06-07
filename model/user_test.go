@@ -16,13 +16,13 @@ func TestUserString(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	InitTestDB(DB)
+	InitTestDB()
 	user, _ := CreateUser("test", "pass")
 	assert.Equal(t, "test", user.LoginName)
 }
 
 func TestUserLogin(t *testing.T) {
-	InitTestDB(DB)
+	InitTestDB()
 	CreateUser("test", "pass")
 	var err error
 

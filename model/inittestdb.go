@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite" // just for test
 	"hangmango-web-api/config"
 	"log"
@@ -9,12 +8,12 @@ import (
 
 // 初始化数据(仅测试环境)
 //
-func InitTestDB(db *gorm.DB) {
+func InitTestDB() {
 	if config.Config.ENV != "test" {
 		panic("invalid env")
 	}
 	// Migrate the schema
-	db.AutoMigrate(&User{}, &Hangman{}, &HangmanGuessedLetter{})
+	DB.AutoMigrate(&User{}, &Hangman{}, &HangmanGuessedLetter{})
 	log.Println("AutoMigrate test db")
 
 	DB.Delete(&User{})

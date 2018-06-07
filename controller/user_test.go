@@ -16,7 +16,7 @@ func TestUserSignUp(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := gin.Default()
 	r.POST("/test", UserSignUp)
-	db.InitTestDB(db.DB)
+	db.InitTestDB()
 
 	// test signup fail
 	//
@@ -49,7 +49,7 @@ func TestUserSignUp(t *testing.T) {
 }
 
 func TestUserSignIn(t *testing.T) {
-	db.InitTestDB(db.DB)
+	db.InitTestDB()
 	reqSuccess, err := http.NewRequest("POST", "/test", strings.NewReader(`{"login_name": "nameUser", "password": "pass"}`))
 	if err != nil {
 		panic(err)
