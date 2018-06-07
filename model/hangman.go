@@ -35,6 +35,27 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() ([]*HangmanGuessedLett
 	return hangmanGuessedLetters, nil
 }
 
+func (hangman *Hangman) GameStr() (gameStr string, err error) {
+	var hangmanGuessedLetters []*HangmanGuessedLetter
+	guessedLetters := make(map[string]bool)
+	hangmanGuessedLetters, err = hangman.AssociatedHangmenGuessedLetters()
+	if err != nil {
+		return
+	}
+	for _, hangmanGuessedLetter := range hangmanGuessedLetters {
+		guessedLetters[hangmanGuessedLetter.Letter] = true
+	}
+	for _, wordLetterRune := range hangman.Word {
+		wordLetter := string(wordLetterRune)
+		if _, ok := guessedLetters[wordLetter]; ok {
+			gameStr += wordLetter
+		} else {
+			gameStr += "*"
+		}
+	}
+	return
+}
+
 func StartNewGame(userId uint) (hangman *Hangman, err error) {
 	source := rand.NewSource(time.Now().Unix())
 	randMachine := rand.New(source)

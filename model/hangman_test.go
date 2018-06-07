@@ -22,3 +22,12 @@ func TestAssociatedHangmenGuessedLetters(t *testing.T) {
 	assert.Equal(t, 1, len(letters))
 	assert.Equal(t, "a", letters[0].Letter)
 }
+
+func TestGameStr(t *testing.T) {
+	InitTestDB()
+	hangman := new(Hangman)
+	hangman.Id = 1
+	DB.Where(hangman).Find(hangman)
+	gameStr, _ := hangman.GameStr()
+	assert.Equal(t, "a*a****", gameStr)
+}
