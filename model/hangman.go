@@ -3,6 +3,7 @@ package model
 import (
 	"hangmango-web-api/config"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -34,16 +35,21 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() ([]*HangmanGuessedLett
 	return hangmanGuessedLetters, nil
 }
 
-func (hangman *Hangman) GameStr() (gameStr string, err error) {
+func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
 	var hangmanGuessedLetters []*HangmanGuessedLetter
-	guessedLetters := make(map[string]bool)
+	lettersMap = make(map[string]bool)
 	hangmanGuessedLetters, err = hangman.AssociatedHangmenGuessedLetters()
 	if err != nil {
 		return
 	}
 	for _, hangmanGuessedLetter := range hangmanGuessedLetters {
-		guessedLetters[hangmanGuessedLetter.Letter] = true
+		lettersMap[hangmanGuessedLetter.Letter] = strings.Contains(hangman.Word, hangmanGuessedLetter.Letter)
 	}
+	return
+}
+
+func (hangman *Hangman) GameStr() (gameStr string, err error) {
+	guessedLetters := hangman.GuessedLettersMap()
 	for _, wordLetterRune := range hangman.Word {
 		wordLetter := string(wordLetterRune)
 		if _, ok := guessedLetters[wordLetter]; ok {
