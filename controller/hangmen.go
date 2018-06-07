@@ -9,12 +9,12 @@ import (
 
 func StartNewGame(c *gin.Context) {
 	userId, _ := c.Get("UserId")
-	wordStr, err := db.StartNewGame(userId.(uint))
+	hangman, err := db.StartNewGame(userId.(uint))
 	if err != nil {
 		panic(err)
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"word": wordStr,
+		"word": hangman.Word,
 	})
 	return
 }

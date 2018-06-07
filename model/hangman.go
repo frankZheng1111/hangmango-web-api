@@ -3,7 +3,7 @@ package model
 import (
 	"hangmango-web-api/config"
 	"math/rand"
-	"regexp"
+	// "regexp"
 	"time"
 )
 
@@ -35,16 +35,18 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() ([]*HangmanGuessedLett
 	return hangmanGuessedLetters, nil
 }
 
-func StartNewGame(userId uint) (gameStr string, err error) {
+func StartNewGame(userId uint) (hangman *Hangman, err error) {
 	source := rand.NewSource(time.Now().Unix())
 	randMachine := rand.New(source)
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
 	word := config.Config.Hangman.Dictionary[randIndex]
-	err = DB.Create(&Hangman{UserId: userId, Word: word}).Error
+	result := DB.Create(&Hangman{UserId: userId, Word: word})
+	err = result.Error
 	if err != nil {
 		return
 	}
-	var re = regexp.MustCompile(`[a-zA-Z]`)
-	gameStr = re.ReplaceAllString(word, `*`)
+	hangman = result.Value.(*Hangman)
+	// var re = regexp.MustCompile(`[a-zA-Z]`)
+	// gameStr = re.ReplaceAllString(word, `*`)
 	return
 }
