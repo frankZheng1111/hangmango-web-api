@@ -11,7 +11,7 @@ import (
 //
 func InitTestDB(db *gorm.DB) {
 	if config.Config.ENV != "test" {
-		panic("invali env")
+		panic("invalid env")
 	}
 	// Migrate the schema
 	db.AutoMigrate(&User{}, &Hangman{}, &HangmanGuessedLetter{})
