@@ -3,7 +3,6 @@ package model
 import (
 	"hangmango-web-api/config"
 	"math/rand"
-	// "regexp"
 	"time"
 )
 
@@ -67,7 +66,5 @@ func StartNewGame(userId uint) (hangman *Hangman, err error) {
 		return
 	}
 	hangman = result.Value.(*Hangman)
-	// var re = regexp.MustCompile(`[a-zA-Z]`)
-	// gameStr = re.ReplaceAllString(word, `*`)
 	return
 }
