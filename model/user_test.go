@@ -38,3 +38,10 @@ func TestUserLogin(t *testing.T) {
 	}
 	assert.Equal(t, "test", user.LoginName)
 }
+
+func TestGetUserById(t *testing.T) {
+	InitTestDB()
+	user, _ := GetUserById(1)
+	assert.Equal(t, "test-user-name", user.LoginName)
+	assert.Equal(t, uint(1), user.Id)
+}
