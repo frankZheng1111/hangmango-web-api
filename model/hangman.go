@@ -35,7 +35,7 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() ([]*HangmanGuessedLett
 	return hangmanGuessedLetters, nil
 }
 
-func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
+func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool, err error) {
 	var hangmanGuessedLetters []*HangmanGuessedLetter
 	lettersMap = make(map[string]bool)
 	hangmanGuessedLetters, err = hangman.AssociatedHangmenGuessedLetters()
@@ -48,8 +48,25 @@ func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
 	return
 }
 
+func (hangman *Hangman) LeftHp() (hp int, err error) {
+	hp = config.Config.Hangman.Hp
+	guessedLettersMap, err := hangman.GuessedLettersMap()
+	if err != nil {
+		return
+	}
+	for _, result := range guessedLettersMap {
+		if !result {
+			hp--
+		}
+	}
+	return
+}
+
 func (hangman *Hangman) GameStr() (gameStr string, err error) {
-	guessedLetters := hangman.GuessedLettersMap()
+	guessedLetters, err := hangman.GuessedLettersMap()
+	if err != nil {
+		return
+	}
 	for _, wordLetterRune := range hangman.Word {
 		wordLetter := string(wordLetterRune)
 		if _, ok := guessedLetters[wordLetter]; ok {

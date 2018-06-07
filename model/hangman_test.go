@@ -31,3 +31,12 @@ func TestGameStr(t *testing.T) {
 	gameStr, _ := hangman.GameStr()
 	assert.Equal(t, "a*a****", gameStr)
 }
+
+func TestLeftHp(t *testing.T) {
+	InitTestDB()
+	hangman := new(Hangman)
+	hangman.Id = 1
+	DB.Where(hangman).Find(hangman)
+	leftHp, _ := hangman.LeftHp()
+	assert.Equal(t, 2, leftHp)
+}

@@ -3,7 +3,7 @@
     "port": 8080
   },
   "hangman": {
-    "hp": 1,
+    "hp": 2,
     "dictionaryName": "dictionary_test.txt"
   },
   "gorm": {
