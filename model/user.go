@@ -32,6 +32,7 @@ func (user *User) HangmenById(id uint) (hangman *Hangman, err error) {
 
 func GetUserById(id uint) (user *User, err error) {
 	user = new(User)
+	// if not find record "First"  will return error and "Find" will not
 	err = DB.Where(&User{Id: id}).First(&user).Error
 	if err != nil {
 		return nil, err

@@ -44,6 +44,9 @@ func TestGetUserById(t *testing.T) {
 	user, _ := GetUserById(1)
 	assert.Equal(t, "test-user-name", user.LoginName)
 	assert.Equal(t, uint(1), user.Id)
+
+	_, err := GetUserById(2)
+	assert.NotNil(t, err)
 }
 
 func TestHangById(t *testing.T) {
