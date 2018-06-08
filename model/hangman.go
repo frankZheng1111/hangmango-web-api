@@ -56,6 +56,10 @@ func (hangman *Hangman) LeftHp() (hp int) {
 	return
 }
 
+func (hangman *Hangman) IsAlive() bool {
+	return hangman.LeftHp() > 0
+}
+
 func (hangman *Hangman) GameStr() (gameStr string) {
 	guessedLetters := hangman.GuessedLettersMap()
 	for _, wordLetterRune := range hangman.Word {

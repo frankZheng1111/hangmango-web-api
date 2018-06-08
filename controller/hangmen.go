@@ -24,7 +24,7 @@ func GuessALetter(c *gin.Context) {
 		return
 	}
 
-	user, err := db.GetUserById(3)
+	user, err := db.GetUserById(uint(hangmanId))
 	if err != nil {
 		panic(err)
 	}

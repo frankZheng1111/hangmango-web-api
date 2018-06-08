@@ -47,3 +47,11 @@ func TestLeftHp(t *testing.T) {
 	leftHp := hangman.LeftHp()
 	assert.Equal(t, 2, leftHp)
 }
+
+func TestIsAlive(t *testing.T) {
+	InitTestDB()
+	hangman := new(Hangman)
+	hangman.Id = 2
+	DB.Where(hangman).Find(hangman)
+	assert.True(t, hangman.IsAlive())
+}
