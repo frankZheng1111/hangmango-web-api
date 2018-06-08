@@ -65,7 +65,7 @@ func UserLogin(loginName string, password string) (user *User, err error) {
 	return
 }
 
-func GetBestUsers(paginate *Paginate) (count int, users []*User, err error) {
+func GetBestUsers(paginate *Paginate) (count int, users []*User) {
 	users = []*User{}
 	limit, offset := paginate.ParseToLimitAndOffset()
 	err = DB.
@@ -73,7 +73,7 @@ func GetBestUsers(paginate *Paginate) (count int, users []*User, err error) {
 		Offset(-1).Limit(-1).Count(&count).
 		Error
 	if err != nil {
-		return 0, nil, err
+		panic(err)
 	}
 	fmt.Println(users)
 
