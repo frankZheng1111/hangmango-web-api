@@ -56,6 +56,10 @@ func (hangman *Hangman) LeftHp() (hp int) {
 	return
 }
 
+func (hangman *Hangman) IsWin() bool {
+	return !strings.Contains(hangman.GameStr(), "*")
+}
+
 func (hangman *Hangman) IsAlive() bool {
 	return hangman.LeftHp() > 0
 }

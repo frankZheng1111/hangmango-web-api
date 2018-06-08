@@ -55,3 +55,15 @@ func TestIsAlive(t *testing.T) {
 	DB.Where(hangman).Find(hangman)
 	assert.True(t, hangman.IsAlive())
 }
+
+func TestIsWin(t *testing.T) {
+	InitTestDB()
+	hangman := new(Hangman)
+	hangman.Id = 2
+	DB.Where(hangman).Find(hangman)
+	assert.False(t, hangman.IsWin())
+	hangman = new(Hangman)
+	hangman.Id = 3
+	DB.Where(hangman).Find(hangman)
+	assert.True(t, hangman.IsWin())
+}
