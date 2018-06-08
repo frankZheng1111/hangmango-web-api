@@ -42,12 +42,12 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() []*HangmanGuessedLette
 	return hangmanGuessedLetters
 }
 
-func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
+func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]int) {
 	var hangmanGuessedLetters []*HangmanGuessedLetter
-	lettersMap = make(map[string]bool)
+	lettersMap = make(map[string]int)
 	hangmanGuessedLetters = hangman.AssociatedHangmenGuessedLetters()
 	for _, hangmanGuessedLetter := range hangmanGuessedLetters {
-		lettersMap[hangmanGuessedLetter.Letter] = strings.Contains(hangman.Word, hangmanGuessedLetter.Letter)
+		lettersMap[hangmanGuessedLetter.Letter]++
 	}
 	return
 }
@@ -55,9 +55,11 @@ func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
 func (hangman *Hangman) LeftHp() (hp int) {
 	hp = config.Config.Hangman.Hp
 	guessedLettersMap := hangman.GuessedLettersMap()
-	for _, result := range guessedLettersMap {
-		if !result {
-			hp--
+	for letter, count := range guessedLettersMap {
+		if strings.Contains(hangman.Word, letter) {
+			hp -= count - 1
+		} else {
+			hp -= count
 		}
 	}
 	return
