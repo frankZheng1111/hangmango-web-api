@@ -26,34 +26,28 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	return
 }
 
-func (hangman *Hangman) AssociatedHangmenGuessedLetters() ([]*HangmanGuessedLetter, error) {
+func (hangman *Hangman) AssociatedHangmenGuessedLetters() []*HangmanGuessedLetter {
 	hangmanGuessedLetters := []*HangmanGuessedLetter{}
 	err := DB.Model(hangman).Association("HangmenGuessedLetters").Find(&hangmanGuessedLetters).Error
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-	return hangmanGuessedLetters, nil
+	return hangmanGuessedLetters
 }
 
-func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool, err error) {
+func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]bool) {
 	var hangmanGuessedLetters []*HangmanGuessedLetter
 	lettersMap = make(map[string]bool)
-	hangmanGuessedLetters, err = hangman.AssociatedHangmenGuessedLetters()
-	if err != nil {
-		return
-	}
+	hangmanGuessedLetters = hangman.AssociatedHangmenGuessedLetters()
 	for _, hangmanGuessedLetter := range hangmanGuessedLetters {
 		lettersMap[hangmanGuessedLetter.Letter] = strings.Contains(hangman.Word, hangmanGuessedLetter.Letter)
 	}
 	return
 }
 
-func (hangman *Hangman) LeftHp() (hp int, err error) {
+func (hangman *Hangman) LeftHp() (hp int) {
 	hp = config.Config.Hangman.Hp
-	guessedLettersMap, err := hangman.GuessedLettersMap()
-	if err != nil {
-		return
-	}
+	guessedLettersMap := hangman.GuessedLettersMap()
 	for _, result := range guessedLettersMap {
 		if !result {
 			hp--
@@ -62,11 +56,8 @@ func (hangman *Hangman) LeftHp() (hp int, err error) {
 	return
 }
 
-func (hangman *Hangman) GameStr() (gameStr string, err error) {
-	guessedLetters, err := hangman.GuessedLettersMap()
-	if err != nil {
-		return
-	}
+func (hangman *Hangman) GameStr() (gameStr string) {
+	guessedLetters := hangman.GuessedLettersMap()
 	for _, wordLetterRune := range hangman.Word {
 		wordLetter := string(wordLetterRune)
 		if _, ok := guessedLetters[wordLetter]; ok {
@@ -78,7 +69,7 @@ func (hangman *Hangman) GameStr() (gameStr string, err error) {
 	return
 }
 
-func StartNewGame(userId uint) (hangman *Hangman, err error) {
+func StartNewGame(userId uint) (hangman *Hangman) {
 	source := rand.NewSource(time.Now().Unix())
 	randMachine := rand.New(source)
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
@@ -86,7 +77,7 @@ func StartNewGame(userId uint) (hangman *Hangman, err error) {
 	result := DB.Create(&Hangman{UserId: userId, Word: word})
 	err = result.Error
 	if err != nil {
-		return
+		panic(err)
 	}
 	hangman = result.Value.(*Hangman)
 	return
