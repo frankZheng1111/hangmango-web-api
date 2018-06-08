@@ -44,8 +44,9 @@ func TestLeftHp(t *testing.T) {
 	hangman := new(Hangman)
 	hangman.Id = 1
 	DB.Where(hangman).Find(hangman)
-	leftHp := hangman.LeftHp()
-	assert.Equal(t, 2, leftHp)
+	assert.Equal(t, 2, hangman.LeftHp())
+	DB.Create(&HangmanGuessedLetter{Id: 1, Letter: "a", HangmanId: 1})
+	assert.Equal(t, 2, hangman.LeftHp())
 }
 
 func TestIsAlive(t *testing.T) {
