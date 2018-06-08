@@ -67,3 +67,21 @@ func TestIsWin(t *testing.T) {
 	DB.Where(hangman).Find(hangman)
 	assert.True(t, hangman.IsWin())
 }
+
+func TestIsGuessFail(t *testing.T) {
+	InitTestDB()
+	hangman := new(Hangman)
+	hangman.Id = 3
+	DB.Where(hangman).Find(hangman)
+	_, err := hangman.Guess("a")
+	assert.Equal(t, "AlreadyWin", err.Error())
+	//
+	hangman = new(Hangman)
+	hangman.Id = 4
+	DB.Where(hangman).Find(hangman)
+	hangman.Guess("c")
+	_, err = hangman.Guess("e")
+	// assert.Equal(t, "AlreadyLose", err.Error())
+	_, err = hangman.Guess("d")
+	assert.Equal(t, "AlreadyLose", err.Error())
+}

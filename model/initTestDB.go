@@ -24,6 +24,7 @@ func InitTestDB() {
 	DB.Create(&Hangman{Id: 1, UserId: 1, Word: "abandon"})
 	DB.Create(&Hangman{Id: 2, UserId: 1, Word: "abandon"})
 	DB.Create(&Hangman{Id: 3, UserId: 1, Word: "a"})
+	DB.Create(&Hangman{Id: 4, UserId: 1, Word: "ant"})
 	DB.Create(&HangmanGuessedLetter{Id: 1, Letter: "a", HangmanId: 1})
 	DB.Create(&HangmanGuessedLetter{Id: 2, Letter: "a", HangmanId: 3})
 }

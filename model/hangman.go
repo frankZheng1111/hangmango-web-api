@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"hangmango-web-api/config"
 	"math/rand"
 	"strings"
@@ -17,6 +18,12 @@ type Hangman struct {
 }
 
 func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuessedLetter, err error) {
+	if hangman.IsWin() {
+		return nil, errors.New("AlreadyWin")
+	}
+	if !hangman.IsAlive() {
+		return nil, errors.New("AlreadyLose")
+	}
 	result := DB.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
 	err = result.Error
 	if err != nil {
