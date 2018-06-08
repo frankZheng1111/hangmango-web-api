@@ -18,6 +18,9 @@ type Hangman struct {
 }
 
 func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuessedLetter, err error) {
+	if len(letter) != 1 {
+		return nil, errors.New("InvalidLetter")
+	}
 	if hangman.IsWin() {
 		return nil, errors.New("AlreadyWin")
 	}

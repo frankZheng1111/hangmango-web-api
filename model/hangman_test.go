@@ -80,9 +80,12 @@ func TestIsGuessFail(t *testing.T) {
 	hangman = new(Hangman)
 	hangman.Id = 4
 	DB.Where(hangman).Find(hangman)
-	hangman.Guess("c")
-	_, err = hangman.Guess("e")
-	// assert.Equal(t, "AlreadyLose", err.Error())
+	_, err = hangman.Guess("esss")
+	assert.Equal(t, "InvalidLetter", err.Error())
+	_, err = hangman.Guess("c")
+	assert.Nil(t, err)
+	_, err = hangman.Guess("c")
+	assert.Nil(t, err)
 	_, err = hangman.Guess("d")
 	assert.Equal(t, "AlreadyLose", err.Error())
 }
