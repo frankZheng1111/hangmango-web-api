@@ -12,6 +12,7 @@ type Hangman struct {
 	Base
 	Id                    uint   `gorm:"column:id; primary_key"`
 	UserId                uint   `gorm:"column:user_id"`
+	Hp                    int    `gorm:"column:hp"`
 	Word                  string `gorm:"column:word"`
 	Status                string `gorm:"column:status;default:PLAYING"`
 	HangmenGuessedLetters []HangmanGuessedLetter
@@ -21,17 +22,24 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if len(letter) != 1 {
 		return nil, errors.New("InvalidLetter")
 	}
-	if hangman.IsWin() {
-		return nil, errors.New("AlreadyWin")
-	}
-	if !hangman.IsAlive() {
-		return nil, errors.New("AlreadyLose")
+	if hangman.Status != "PLAYING" {
+		return nil, errors.New("AlreadyFinish")
 	}
 	result := DB.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
 	err = result.Error
 	if err != nil {
 		return
 	}
+	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] > 0 {
+		hangman.Hp--
+	}
+	if !hangman.IsAlive() {
+		hangman.Status = "FAIL"
+	}
+	if hangman.IsWin() {
+		hangman.Status = "WIN"
+	}
+	DB.Save(hangman)
 	hangmanGuessedLetter = result.Value.(*HangmanGuessedLetter) // must be ptr
 	return
 }
@@ -55,25 +63,12 @@ func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]int) {
 	return
 }
 
-func (hangman *Hangman) LeftHp() (hp int) {
-	hp = config.Config.Hangman.Hp
-	guessedLettersMap := hangman.GuessedLettersMap()
-	for letter, count := range guessedLettersMap {
-		if strings.Contains(hangman.Word, letter) {
-			hp -= count - 1
-		} else {
-			hp -= count
-		}
-	}
-	return
-}
-
 func (hangman *Hangman) IsWin() bool {
 	return !strings.Contains(hangman.GameStr(), "*")
 }
 
 func (hangman *Hangman) IsAlive() bool {
-	return hangman.LeftHp() > 0
+	return hangman.Hp > 0
 }
 
 func (hangman *Hangman) GameStr() (gameStr string) {
@@ -94,7 +89,8 @@ func StartNewGame(userId uint) (hangman *Hangman) {
 	randMachine := rand.New(source)
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
 	word := config.Config.Hangman.Dictionary[randIndex]
-	result := DB.Create(&Hangman{UserId: userId, Word: word})
+	hp := config.Config.Hangman.Hp
+	result := DB.Create(&Hangman{UserId: userId, Word: word, Hp: hp})
 	err = result.Error
 	if err != nil {
 		panic(err)

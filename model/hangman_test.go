@@ -39,16 +39,6 @@ func TestGameStr(t *testing.T) {
 	assert.Equal(t, "a*a****", gameStr)
 }
 
-func TestLeftHp(t *testing.T) {
-	InitTestDB()
-	hangman := new(Hangman)
-	hangman.Id = 1
-	DB.Where(hangman).Find(hangman)
-	assert.Equal(t, 2, hangman.LeftHp())
-	DB.Create(&HangmanGuessedLetter{Id: 1, Letter: "a", HangmanId: 1})
-	assert.Equal(t, 2, hangman.LeftHp())
-}
-
 func TestIsAlive(t *testing.T) {
 	InitTestDB()
 	hangman := new(Hangman)
@@ -75,7 +65,7 @@ func TestIsGuessFail(t *testing.T) {
 	hangman.Id = 3
 	DB.Where(hangman).Find(hangman)
 	_, err := hangman.Guess("a")
-	assert.Equal(t, "AlreadyWin", err.Error())
+	assert.Equal(t, "AlreadyFinish", err.Error())
 	//
 	hangman = new(Hangman)
 	hangman.Id = 4
@@ -87,5 +77,5 @@ func TestIsGuessFail(t *testing.T) {
 	_, err = hangman.Guess("c")
 	assert.Nil(t, err)
 	_, err = hangman.Guess("d")
-	assert.Equal(t, "AlreadyLose", err.Error())
+	assert.Equal(t, "AlreadyFinish", err.Error())
 }

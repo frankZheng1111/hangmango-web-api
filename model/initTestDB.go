@@ -21,10 +21,10 @@ func InitTestDB() {
 	DB.Delete(&HangmanGuessedLetter{})
 
 	DB.Create(&User{Id: 1, LoginName: "test-user-name", PasswordHash: "passwordhash"})
-	DB.Create(&Hangman{Id: 1, UserId: 1, Word: "abandon"})
-	DB.Create(&Hangman{Id: 2, UserId: 1, Word: "abandon"})
-	DB.Create(&Hangman{Id: 3, UserId: 1, Word: "a"})
-	DB.Create(&Hangman{Id: 4, UserId: 1, Word: "ant"})
+	DB.Create(&Hangman{Id: 1, UserId: 1, Word: "abandon", Hp: 2})
+	DB.Create(&Hangman{Id: 2, UserId: 1, Word: "abandon", Hp: 2})
+	DB.Create(&Hangman{Id: 3, UserId: 1, Word: "a", Hp: 2, Status: "WIN"})
+	DB.Create(&Hangman{Id: 4, UserId: 1, Word: "ant", Hp: 2})
 	DB.Create(&HangmanGuessedLetter{Id: 1, Letter: "a", HangmanId: 1})
 	DB.Create(&HangmanGuessedLetter{Id: 2, Letter: "a", HangmanId: 3})
 }
