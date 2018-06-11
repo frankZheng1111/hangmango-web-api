@@ -25,9 +25,11 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if hangman.Status != "PLAYING" {
 		return nil, errors.New("AlreadyFinish")
 	}
-	result := DB.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
+	tx := DB.Begin()
+	result := tx.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
 	err = result.Error
 	if err != nil {
+		tx.Rollback()
 		return
 	}
 	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] > 1 {
@@ -39,10 +41,12 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if hangman.IsWin() {
 		hangman.Status = "WIN"
 	}
-	err = DB.Save(hangman).Error
+	err = tx.Save(hangman).Error
 	if err != nil {
+		tx.Rollback()
 		return
 	}
+	tx.Commit()
 	hangmanGuessedLetter = result.Value.(*HangmanGuessedLetter) // must be ptr
 	return
 }
