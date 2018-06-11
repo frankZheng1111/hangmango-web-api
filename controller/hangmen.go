@@ -5,13 +5,20 @@ import (
 	db "hangmango-web-api/model"
 	"net/http"
 	"strconv"
+	"strings"
 )
+
+type GuessLetter struct {
+	Letter string `json:"letter" binding:"required"`
+}
 
 func StartNewGame(c *gin.Context) {
 	userId, _ := c.Get("UserId")
 	hangman := db.StartNewGame(userId.(uint))
 	gameStr := hangman.GameStr()
 	c.JSON(http.StatusOK, gin.H{
+		"id":   hangman.Id,
+		"hp":   hangman.Hp,
 		"word": gameStr,
 	})
 	return
@@ -23,8 +30,17 @@ func GuessALetter(c *gin.Context) {
 		ValidationErrorResponse(c)
 		return
 	}
+	guessLetter := new(GuessLetter)
+	if err = c.BindJSON(guessLetter); err != nil {
+		if !strings.Contains(err.Error(), "validation") {
+			panic(err)
+		}
+		ValidationErrorResponse(c)
+		return
+	}
 
-	user, err := db.GetUserById(uint(hangmanId))
+	userId, _ := c.Get("UserId")
+	user, err := db.GetUserById(userId.(uint))
 	if err != nil {
 		panic(err)
 	}
@@ -33,9 +49,15 @@ func GuessALetter(c *gin.Context) {
 		panic(err)
 	}
 
-	letter, err := hangman.Guess("z")
+	_, err = hangman.Guess(guessLetter.Letter)
+	if err != nil {
+		panic(err)
+	}
+	gameStr := hangman.GameStr()
 	c.JSON(http.StatusOK, gin.H{
-		"msg": letter.Id,
+		"id":   hangman.Id,
+		"hp":   hangman.Hp,
+		"word": gameStr,
 	})
 	return
 }
