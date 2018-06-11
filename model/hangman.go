@@ -39,7 +39,10 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if hangman.IsWin() {
 		hangman.Status = "WIN"
 	}
-	DB.Save(hangman)
+	err = DB.Save(hangman).Error
+	if err != nil {
+		return
+	}
 	hangmanGuessedLetter = result.Value.(*HangmanGuessedLetter) // must be ptr
 	return
 }
