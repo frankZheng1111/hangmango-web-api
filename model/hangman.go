@@ -30,7 +30,7 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if err != nil {
 		return
 	}
-	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] > 0 {
+	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] > 1 {
 		hangman.Hp--
 	}
 	if !hangman.IsAlive() {

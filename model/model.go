@@ -44,5 +44,9 @@ func InitModel() {
 	DB.DB().SetMaxIdleConns(config.Config.GORM.MaxIdle)
 	DB.DB().SetMaxOpenConns(config.Config.GORM.MaxOpen)
 
+	if config.Config.ENV == "dev" {
+		DB = DB.Debug()
+	}
+
 	log.Println("Init Model Complete")
 }
