@@ -6,18 +6,24 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"time"
 )
 
 const PROJECT_NAME string = "hangmango-web-api"
 
 type JSONConfig struct {
-	ENV         string
-	ProjectName string
-	Server      Server
-	GORM        GORM
-	Redis       Redis
-	Hangman     Hangman
+	ENV                   string
+	SnowflakeStartTimeStr string
+	SnowflakeStartTime    time.Time
+	DataCenterId          int8
+	WorkerId              int8
+	ProjectName           string
+	Server                Server
+	GORM                  GORM
+	Redis                 Redis
+	Hangman               Hangman
 }
 
 type Server struct {
@@ -86,7 +92,17 @@ func InitConfig(config *JSONConfig) {
 	if env == "" {
 		env = "dev"
 	}
+	dataCenterId, err := strconv.Atoi(os.Getenv("DATA_CENTER_ID"))
+	if err != nil {
+		dataCenterId = 0
+	}
+	workerId, err := strconv.Atoi(os.Getenv("WORKER_ID"))
+	if err != nil {
+		workerId = 0
+	}
 	config.ENV = env
+	config.DataCenterId = int8(dataCenterId)
+	config.WorkerId = int8(workerId)
 
 	filePath := config.ConfigFilePath(env)
 	file, err := os.Open(filePath)
@@ -98,6 +114,12 @@ func InitConfig(config *JSONConfig) {
 	if err = decoder.Decode(&config); err != nil {
 		panic(err)
 	}
+	timeStr := config.SnowflakeStartTimeStr
+	times, err := time.Parse(time.RFC3339, timeStr)
+	if err != nil {
+		panic(err)
+	}
+	config.SnowflakeStartTime = times
 	if err = config.InitDictionary(); err != nil {
 		panic(err)
 	}
