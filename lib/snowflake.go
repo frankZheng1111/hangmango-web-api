@@ -1,4 +1,4 @@
-package libs
+package lib
 
 import (
 	"hangmango-web-api/config"
@@ -12,7 +12,7 @@ const DATA_ID_MAX_BIT = 5
 const WORKER_ID_MAX_BIT = 5
 const MAX_CURRENT_ID = 1<<CURRENT_ID_MAX_BIT - 1
 
-type SnowFlake struct {
+type Snowflake struct {
 	Sm             sync.Mutex
 	StartTimestamp int64 // 41位
 	CurrentId      int64 // 12位  0 ~ 4095
@@ -21,35 +21,35 @@ type SnowFlake struct {
 	LastTimestamp  int64
 }
 
-func (snowFlake *SnowFlake) ParseToTimestamp(times time.Time) int64 {
+func (snowflake *Snowflake) ParseToTimestamp(times time.Time) int64 {
 	return times.UnixNano() / int64(TIME_UNIT/time.Nanosecond)
 }
 
-func (snowFlake *SnowFlake) GenerateId() int64 {
-	snowFlake.Sm.Lock()
-	currentTimestamp := snowFlake.ParseToTimestamp(time.Now()) - snowFlake.StartTimestamp
-	if snowFlake.LastTimestamp != currentTimestamp {
-		snowFlake.LastTimestamp = currentTimestamp
-		snowFlake.CurrentId = 0
+func (snowflake *Snowflake) GenerateId() int64 {
+	snowflake.Sm.Lock()
+	currentTimestamp := snowflake.ParseToTimestamp(time.Now()) - snowflake.StartTimestamp
+	if snowflake.LastTimestamp != currentTimestamp {
+		snowflake.LastTimestamp = currentTimestamp
+		snowflake.CurrentId = 0
 	}
-	if snowFlake.CurrentId > MAX_CURRENT_ID {
+	if snowflake.CurrentId > MAX_CURRENT_ID {
 		time.Sleep(TIME_UNIT)
-		snowFlake.Sm.Unlock()
-		return snowFlake.GenerateId()
+		snowflake.Sm.Unlock()
+		return snowflake.GenerateId()
 	}
 	Id := currentTimestamp<<(CURRENT_ID_MAX_BIT+WORKER_ID_MAX_BIT+DATA_ID_MAX_BIT) |
-		snowFlake.DataCenterId<<(CURRENT_ID_MAX_BIT+WORKER_ID_MAX_BIT) |
-		snowFlake.WorkerId<<CURRENT_ID_MAX_BIT |
-		snowFlake.CurrentId
-	snowFlake.CurrentId++
-	snowFlake.Sm.Unlock()
+		snowflake.DataCenterId<<(CURRENT_ID_MAX_BIT+WORKER_ID_MAX_BIT) |
+		snowflake.WorkerId<<CURRENT_ID_MAX_BIT |
+		snowflake.CurrentId
+	snowflake.CurrentId++
+	snowflake.Sm.Unlock()
 	return Id
 }
 
-func NewSnowflake() *SnowFlake {
-	snowFlake := new(SnowFlake)
-	snowFlake.StartTimestamp = snowFlake.ParseToTimestamp(config.Config.SnowflakeStartTime)
-	snowFlake.DataCenterId = int64(config.Config.DataCenterId)
-	snowFlake.WorkerId = int64(config.Config.WorkerId)
-	return snowFlake
+func NewSnowflake() *Snowflake {
+	snowflake := new(Snowflake)
+	snowflake.StartTimestamp = snowflake.ParseToTimestamp(config.Config.SnowflakeStartTime)
+	snowflake.DataCenterId = int64(config.Config.DataCenterId)
+	snowflake.WorkerId = int64(config.Config.WorkerId)
+	return snowflake
 }

@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"hangmango-web-api/config"
+	"hangmango-web-api/lib"
 	"math/rand"
 	"strings"
 	"time"
@@ -10,13 +11,15 @@ import (
 
 type Hangman struct {
 	Base
-	Id                    int64   `gorm:"column:id; primary_key"`
-	UserId                int64   `gorm:"column:user_id"`
+	Id                    int64  `gorm:"column:id; primary_key"`
+	UserId                int64  `gorm:"column:user_id"`
 	Hp                    int    `gorm:"column:hp"`
 	Word                  string `gorm:"column:word"`
 	Status                string `gorm:"column:status;default:PLAYING"`
 	HangmenGuessedLetters []HangmanGuessedLetter
 }
+
+var HangmanSnowflake lib.Snowflake
 
 func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuessedLetter, err error) {
 	if len(letter) != 1 {
