@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"fmt"
 	"github.com/go-redis/redis"
 	"hangmango-web-api/config"
 )
@@ -19,7 +18,4 @@ func InitRedis() {
 		Password: config.Config.Redis.Password,
 		DB:       config.Config.Redis.DB,
 	})
-
-	pong, err := Client.Ping().Result()
-	fmt.Println(pong, err)
 }
