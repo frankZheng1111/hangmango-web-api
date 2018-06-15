@@ -19,7 +19,11 @@ type Hangman struct {
 	HangmenGuessedLetters []HangmanGuessedLetter
 }
 
-var HangmanSnowflake lib.Snowflake
+var HangmanSnowflake *lib.Snowflake
+
+func init() {
+	HangmanSnowflake = lib.NewSnowflake()
+}
 
 func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuessedLetter, err error) {
 	if len(letter) != 1 {
@@ -29,7 +33,11 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 		return nil, errors.New("AlreadyFinish")
 	}
 	tx := DB.Begin()
-	result := tx.Create(&HangmanGuessedLetter{Letter: letter, HangmanId: hangman.Id})
+	result := tx.Create(&HangmanGuessedLetter{
+		Id:        HangmanGuessedLetterSnowflake.Id(),
+		Letter:    letter,
+		HangmanId: hangman.Id,
+	})
 	err = result.Error
 	if err != nil {
 		tx.Rollback()
@@ -100,7 +108,12 @@ func StartNewGame(userId int64) (hangman *Hangman) {
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
 	word := config.Config.Hangman.Dictionary[randIndex]
 	hp := config.Config.Hangman.Hp
-	result := DB.Create(&Hangman{UserId: userId, Word: word, Hp: hp})
+	result := DB.Create(&Hangman{
+		Id:     HangmanSnowflake.Id(),
+		UserId: userId,
+		Word:   word,
+		Hp:     hp,
+	})
 	err = result.Error
 	if err != nil {
 		panic(err)

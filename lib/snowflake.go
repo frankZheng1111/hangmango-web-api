@@ -25,7 +25,7 @@ func (snowflake *Snowflake) ParseToTimestamp(times time.Time) int64 {
 	return times.UnixNano() / int64(TIME_UNIT/time.Nanosecond)
 }
 
-func (snowflake *Snowflake) GenerateId() int64 {
+func (snowflake *Snowflake) Id() int64 {
 	snowflake.Sm.Lock()
 	currentTimestamp := snowflake.ParseToTimestamp(time.Now()) - snowflake.StartTimestamp
 	if snowflake.LastTimestamp != currentTimestamp {
@@ -35,7 +35,7 @@ func (snowflake *Snowflake) GenerateId() int64 {
 	if snowflake.CurrentId > MAX_CURRENT_ID {
 		time.Sleep(TIME_UNIT)
 		snowflake.Sm.Unlock()
-		return snowflake.GenerateId()
+		return snowflake.Id()
 	}
 	Id := currentTimestamp<<(CURRENT_ID_MAX_BIT+WORKER_ID_MAX_BIT+DATA_ID_MAX_BIT) |
 		snowflake.DataCenterId<<(CURRENT_ID_MAX_BIT+WORKER_ID_MAX_BIT) |

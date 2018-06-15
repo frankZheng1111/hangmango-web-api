@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"hangmango-web-api/lib"
 	"log"
 	"time"
 )
@@ -11,10 +12,16 @@ const PASSWORD_SALT_KEY string = "qwert"
 
 type User struct {
 	Base
-	Id           int64      `gorm:"column:id; primary_key"`
+	Id           int64     `gorm:"column:id; primary_key"`
 	LoginName    string    `gorm:"column:login_name"`
 	PasswordHash string    `gorm:"column:password_hash"`
 	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
+}
+
+var UserSnowflake *lib.Snowflake
+
+func init() {
+	UserSnowflake = lib.NewSnowflake()
 }
 
 func (user *User) String() string {
@@ -42,7 +49,11 @@ func GetUserById(id int64) (user *User, err error) {
 
 func CreateUser(loginName string, password string) (user *User, err error) {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password+PASSWORD_SALT_KEY), bcrypt.DefaultCost)
-	result := DB.Create(&User{LoginName: loginName, PasswordHash: string(hashedPassword)})
+	result := DB.Create(&User{
+		Id:           UserSnowflake.Id(),
+		LoginName:    loginName,
+		PasswordHash: string(hashedPassword),
+	})
 	err = result.Error
 	if err != nil {
 		return nil, err
