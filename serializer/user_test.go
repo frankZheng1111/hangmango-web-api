@@ -14,6 +14,6 @@ func TestSerializeBaseUsers(t *testing.T) {
 
 	userResource := SerializeBaseUsers(1, []*db.User{user})
 	assert.Equal(t, 1, userResource.TotalCount)
-	assert.Equal(t, uint(1), userResource.Data[0].Id)
+	assert.Equal(t, int64(1), userResource.Data[0].Id)
 	assert.Equal(t, "test", userResource.Data[0].LoginName)
 }

@@ -11,7 +11,7 @@ const PASSWORD_SALT_KEY string = "qwert"
 
 type User struct {
 	Base
-	Id           uint      `gorm:"column:id; primary_key"`
+	Id           int64      `gorm:"column:id; primary_key"`
 	LoginName    string    `gorm:"column:login_name"`
 	PasswordHash string    `gorm:"column:password_hash"`
 	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
@@ -21,7 +21,7 @@ func (user *User) String() string {
 	return fmt.Sprintf("Id: %d, LoginName: %s, CreatedAt: %v", user.Id, user.LoginName, user.CreatedAt.Format(time.RFC3339))
 }
 
-func (user *User) HangmenById(id uint) (hangman *Hangman, err error) {
+func (user *User) HangmenById(id int64) (hangman *Hangman, err error) {
 	hangman = new(Hangman)
 	err = DB.Where(&Hangman{Id: id, UserId: user.Id}).First(&hangman).Error
 	if err != nil {
@@ -30,7 +30,7 @@ func (user *User) HangmenById(id uint) (hangman *Hangman, err error) {
 	return
 }
 
-func GetUserById(id uint) (user *User, err error) {
+func GetUserById(id int64) (user *User, err error) {
 	user = new(User)
 	// if not find record "First"  will return error and "Find" will not
 	err = DB.Where(&User{Id: id}).First(&user).Error

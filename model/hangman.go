@@ -10,8 +10,8 @@ import (
 
 type Hangman struct {
 	Base
-	Id                    uint   `gorm:"column:id; primary_key"`
-	UserId                uint   `gorm:"column:user_id"`
+	Id                    int64   `gorm:"column:id; primary_key"`
+	UserId                int64   `gorm:"column:user_id"`
 	Hp                    int    `gorm:"column:hp"`
 	Word                  string `gorm:"column:word"`
 	Status                string `gorm:"column:status;default:PLAYING"`
@@ -91,7 +91,7 @@ func (hangman *Hangman) GameStr() (gameStr string) {
 	return
 }
 
-func StartNewGame(userId uint) (hangman *Hangman) {
+func StartNewGame(userId int64) (hangman *Hangman) {
 	source := rand.NewSource(time.Now().Unix())
 	randMachine := rand.New(source)
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)

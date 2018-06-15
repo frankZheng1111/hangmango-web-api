@@ -7,7 +7,7 @@ import (
 )
 
 type BaseUser struct {
-	Id        uint      `json:"id"`
+	Id        int64      `json:"id"`
 	LoginName string    `json:"login_name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`

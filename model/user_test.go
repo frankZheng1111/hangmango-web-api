@@ -43,7 +43,7 @@ func TestGetUserById(t *testing.T) {
 	InitTestDB()
 	user, _ := GetUserById(1)
 	assert.Equal(t, "test-user-name", user.LoginName)
-	assert.Equal(t, uint(1), user.Id)
+	assert.Equal(t, int64(1), user.Id)
 
 	_, err := GetUserById(2)
 	assert.NotNil(t, err)
@@ -53,5 +53,5 @@ func TestHangById(t *testing.T) {
 	InitTestDB()
 	user, _ := GetUserById(1)
 	hangman, _ := user.HangmenById(1)
-	assert.Equal(t, uint(1), hangman.Id)
+	assert.Equal(t, int64(1), hangman.Id)
 }

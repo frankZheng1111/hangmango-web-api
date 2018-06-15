@@ -10,7 +10,7 @@ func TestStartNewGame(t *testing.T) {
 	hangman := StartNewGame(1)
 	assert.Equal(t, "abandon", hangman.Word)
 	assert.Equal(t, "PLAYING", hangman.Status)
-	assert.Equal(t, uint(1), hangman.UserId)
+	assert.Equal(t, int64(1), hangman.UserId)
 }
 
 func TestAssociatedHangmenGuessedLetters(t *testing.T) {

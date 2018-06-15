@@ -14,7 +14,7 @@ type GuessLetter struct {
 
 func StartNewGame(c *gin.Context) {
 	userId, _ := c.Get("UserId")
-	hangman := db.StartNewGame(userId.(uint))
+	hangman := db.StartNewGame(userId.(int64))
 	gameStr := hangman.GameStr()
 	c.JSON(http.StatusOK, gin.H{
 		"id":   hangman.Id,
@@ -40,11 +40,11 @@ func GuessALetter(c *gin.Context) {
 	}
 
 	userId, _ := c.Get("UserId")
-	user, err := db.GetUserById(userId.(uint))
+	user, err := db.GetUserById(userId.(int64))
 	if err != nil {
 		panic(err)
 	}
-	hangman, err := user.HangmenById(uint(hangmanId))
+	hangman, err := user.HangmenById(int64(hangmanId))
 	if err != nil {
 		panic(err)
 	}

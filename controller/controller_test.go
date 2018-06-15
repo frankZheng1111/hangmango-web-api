@@ -110,7 +110,7 @@ func TestValidAuthToken(t *testing.T) {
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, reqWithValidToken)
 	userId, _ := resultC.Get("UserId")
-	assert.Equal(t, uint(1), userId)
+	assert.Equal(t, int64(1), userId)
 }
 
 func TestParsePaginateFromQuery(t *testing.T) {

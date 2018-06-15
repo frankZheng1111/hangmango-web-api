@@ -13,7 +13,7 @@ import (
 )
 
 type AuthClaims struct {
-	UserId uint `json:"userId"`
+	UserId int64 `json:"userId"`
 	jwt.StandardClaims
 }
 
@@ -69,7 +69,7 @@ func ValidationErrorResponse(c *gin.Context) {
 	return
 }
 
-func GenerateLoginToken(userId uint) (string, error) {
+func GenerateLoginToken(userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": userId,
 		"exp":    time.Now().Add(time.Hour * time.Duration(1)).Unix(),
