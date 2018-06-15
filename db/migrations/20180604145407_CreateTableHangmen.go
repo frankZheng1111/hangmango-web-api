@@ -8,8 +8,8 @@ import (
 func Up_20180604145407(txn *sql.Tx) {
 	if _, err := txn.Exec(`
 	CREATE TABLE IF NOT EXISTS hangmen (
-		id INT UNSIGNED AUTO_INCREMENT,
-		user_id INT UNSIGNED NOT NULL,
+		id BIGINT AUTO_INCREMENT,
+		user_id BIGINT NOT NULL,
 		word VARCHAR(50) NOT NULL,
 		status VARCHAR(20) NOT NULL DEFAULT "PLAYING",
 		hp INT NOT NULL,
@@ -34,8 +34,8 @@ func Up_20180604145407(txn *sql.Tx) {
 
 	if _, err := txn.Exec(`
 	CREATE TABLE IF NOT EXISTS hangman_guessed_letters (
-		id INT UNSIGNED AUTO_INCREMENT,
-		hangman_id INT UNSIGNED NOT NULL,
+		id BIGINT AUTO_INCREMENT,
+		hangman_id BIGINT NOT NULL,
 		letter VARCHAR(1) NOT NULL,
 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
