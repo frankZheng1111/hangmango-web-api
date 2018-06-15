@@ -49,6 +49,7 @@ type Redis struct {
 	Address  string
 	Password string
 	AuthKey  string
+	DB       int
 }
 
 var Config JSONConfig

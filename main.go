@@ -17,7 +17,7 @@ func main() {
 	defer db.DB.Close()
 	ginRouter := gin.Default()
 
-	store, err := redis.NewStore(10, config.Config.Redis.Network, config.Config.Redis.Address, config.Config.Redis.Password, []byte(config.Config.Redis.AuthKey))
+	store, err := redis.NewStore(config.Config.Redis.MaxIdle, config.Config.Redis.Network, config.Config.Redis.Address, config.Config.Redis.Password, []byte(config.Config.Redis.AuthKey))
 	if err != nil {
 		panic(err)
 	}

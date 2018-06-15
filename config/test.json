@@ -18,6 +18,7 @@
     "network": "tcp",
     "address": "127.0.0.1:6379",
     "password": "",
-    "authKey": "test-session"
+    "authKey": "test-session",
+    "db": 0
   }
 }
