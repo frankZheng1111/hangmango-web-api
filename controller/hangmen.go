@@ -59,9 +59,7 @@ func GuessALetter(c *gin.Context) {
 		panic(err)
 	}
 	if timestamp == 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"msg": "OVER_FREQUENCY",
-		})
+		MissingLockErrorResponse(c)
 		return
 	}
 	_, err = hangman.Guess(guessLetter.Letter)

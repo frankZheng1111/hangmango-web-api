@@ -69,6 +69,13 @@ func ValidationErrorResponse(c *gin.Context) {
 	return
 }
 
+func MissingLockErrorResponse(c *gin.Context) {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"msg": "OverFrequency",
+	})
+	return
+}
+
 func GenerateLoginToken(userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": userId,
