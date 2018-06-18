@@ -19,12 +19,15 @@ func GetRedisLock(key string, expiredIn time.Duration) (int64, error) {
 func UnlockRedisLock(key string, value int64) (bool, error) {
 	luaScript := `
 		if (redis.call('get', KEYS[1]) == ARGV[1]) then
-			redis.call('del', KEYS[1])\n");
-			return true
+			redis.call('del', KEYS[1]);
+			return 1
 		else
-			return false
+			return 0
 		end
 	`
 	result, err := Client.Eval(luaScript, []string{key}, value).Result()
-	return result.(bool), err
+	if err != nil {
+		return false, err
+	}
+	return result.(int64) == 1, err
 }
