@@ -33,6 +33,27 @@ func TestValidationErrorResponse(t *testing.T) {
 	assert.Equal(t, "ParamsValidationError", respJson["msg"])
 }
 
+func TestMissingLockErrorResponse(t *testing.T) {
+	req, err := http.NewRequest("GET", "/test", nil)
+	if err != nil {
+		panic(err)
+	}
+	w := httptest.NewRecorder()
+
+	r := gin.Default()
+	r.GET("/test", MissingLockErrorResponse)
+	r.ServeHTTP(w, req)
+
+	var respJson map[string]interface{}
+	decoder := json.NewDecoder(w.Body)
+	if err := decoder.Decode(&respJson); err != nil {
+		panic(err)
+	}
+
+	assert.Equal(t, 400, w.Code)
+	assert.Equal(t, "OverFrequency", respJson["msg"])
+}
+
 func TestCommonPanicHandle(t *testing.T) {
 	req, err := http.NewRequest("GET", "/test", nil)
 	if err != nil {
