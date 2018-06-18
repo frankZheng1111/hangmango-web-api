@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"hangmango-web-api/lib"
 	db "hangmango-web-api/model"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type GuessLetter struct {
@@ -49,7 +52,20 @@ func GuessALetter(c *gin.Context) {
 		panic(err)
 	}
 
+	guessLetterKey := fmt.Sprintf("user-%v-guess-hangman-%v", userId, hangmanId)
+	expiredIn := time.Duration(5) * time.Second
+	timestamp, err := lib.GetRedisLock(guessLetterKey, expiredIn)
+	if err != nil {
+		panic(err)
+	}
+	if timestamp == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"msg": "OVER_FREQUENCY",
+		})
+		return
+	}
 	_, err = hangman.Guess(guessLetter.Letter)
+	lib.UnlockRedisLock(guessLetterKey, timestamp)
 	if err != nil {
 		panic(err)
 	}
