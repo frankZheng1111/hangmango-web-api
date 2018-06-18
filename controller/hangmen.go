@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"hangmango-web-api/lib"
 	db "hangmango-web-api/model"
+	"hangmango-web-api/serializer"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,12 +19,7 @@ type GuessLetter struct {
 func StartNewGame(c *gin.Context) {
 	userId, _ := c.Get("UserId")
 	hangman := db.StartNewGame(userId.(int64))
-	gameStr := hangman.GameStr()
-	c.JSON(http.StatusOK, gin.H{
-		"id":   hangman.Id,
-		"hp":   hangman.Hp,
-		"word": gameStr,
-	})
+	c.JSON(http.StatusOK, serializer.SerializeGuessingHangman(hangman))
 	return
 }
 
@@ -67,11 +63,6 @@ func GuessALetter(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	gameStr := hangman.GameStr()
-	c.JSON(http.StatusOK, gin.H{
-		"id":   hangman.Id,
-		"hp":   hangman.Hp,
-		"word": gameStr,
-	})
+	c.JSON(http.StatusOK, serializer.SerializeGuessingHangman(hangman))
 	return
 }
