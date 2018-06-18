@@ -43,7 +43,7 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 		tx.Rollback()
 		return
 	}
-	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] > 1 {
+	if !strings.Contains(hangman.Word, letter) || hangman.GuessedLettersMap()[letter] >= 1 {
 		hangman.Hp--
 	}
 	if !hangman.IsAlive() {
