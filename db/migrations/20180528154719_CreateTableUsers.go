@@ -9,6 +9,10 @@ func Up_20180528154719(txn *sql.Tx) {
 	if _, err := txn.Exec(`
 	CREATE TABLE IF NOT EXISTS users (
 		id BIGINT AUTO_INCREMENT,
+		win_count INT NOT NULL DEFAULT 0,
+		finish_count INT NOT NULL DEFAULT 0,
+		win_rate FLOAT,
+		version INT NOT NULL DEFAULT 0,
 		login_name VARCHAR(50) NOT NULL UNIQUE,
 		password_hash VARCHAR(100) NOT NULL,
 		created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
