@@ -15,6 +15,10 @@ type User struct {
 	Id           int64     `gorm:"column:id; primary_key"`
 	LoginName    string    `gorm:"column:login_name"`
 	PasswordHash string    `gorm:"column:password_hash"`
+	WinCount     int32     `gorm:"column:win_count"`
+	FinishCount  int32     `gorm:"column:finish_count"`
+	WinRate      float32   `gorm:"column:win_rate"`
+	version      int       `gorm:"column:version"`
 	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
 }
 
