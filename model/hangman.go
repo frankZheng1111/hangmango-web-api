@@ -133,7 +133,9 @@ func CompletedHangmen(userId int64, paginate *Paginate) (count int64, hangmen []
 		Where(filter).
 		Where("status != ?", "PLAYING").
 		Order("hp desc").
-		Offset(offset).Limit(limit).Find(&hangmen).
+		Offset(offset).Limit(limit).
+		Preload("HangmenGuessedLetters").
+		Find(&hangmen).
 		Offset(-1).Limit(-1).Count(&count).
 		Error
 	if err != nil {
