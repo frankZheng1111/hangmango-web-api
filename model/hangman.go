@@ -103,7 +103,7 @@ func (hangman *Hangman) GameStr() (gameStr string) {
 }
 
 func StartNewGame(userId int64) (hangman *Hangman) {
-	source := rand.NewSource(time.Now().Unix())
+	source := rand.NewSource(time.Now().UnixNano())
 	randMachine := rand.New(source)
 	randIndex := randMachine.Intn(len(config.Config.Hangman.Dictionary) - 1)
 	word := config.Config.Hangman.Dictionary[randIndex]
