@@ -16,7 +16,7 @@ type GuessLetter struct {
 	Letter string `json:"letter" binding:"required"`
 }
 
-func HangmanList(c *gin.Context) {
+func CompletedHangmanList(c *gin.Context) {
 	// userId, _ := c.Get("UserId")
 	c.JSON(http.StatusOK, gin.H{"msg": "success"})
 	return
