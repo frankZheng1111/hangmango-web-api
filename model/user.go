@@ -113,7 +113,6 @@ func GetBestUsers(paginate *Paginate) (count int, users []*User) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(users)
 
 	return
 }
