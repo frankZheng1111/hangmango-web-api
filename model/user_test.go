@@ -15,6 +15,16 @@ func TestUserString(t *testing.T) {
 	assert.Equal(t, "Id: 1, LoginName: email, CreatedAt: "+now.Format(time.RFC3339), user.String())
 }
 
+func TestUpdateScore(t *testing.T) {
+	InitTestDB()
+	user := new(User)
+	DB.Where(User{Id: 1}).First(user)
+	user.UpdateScore(true)
+	assert.Equal(t, float32(1), user.WinRate)
+	user.UpdateScore(false)
+	assert.Equal(t, float32(1)/float32(2), user.WinRate)
+}
+
 func TestCreateUser(t *testing.T) {
 	InitTestDB()
 	user, _ := CreateUser("test", "pass")
