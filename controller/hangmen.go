@@ -17,8 +17,8 @@ type GuessLetter struct {
 }
 
 func CompletedHangmanList(c *gin.Context) {
-	// userId, _ := c.Get("UserId")
-	c.JSON(http.StatusOK, gin.H{"msg": "success"})
+	_, hangmen := db.CompletedHangmen(0, ParsePaginateFromQuery(c))
+	c.JSON(http.StatusOK, hangmen)
 	return
 }
 

@@ -121,3 +121,23 @@ func StartNewGame(userId int64) (hangman *Hangman) {
 	hangman = result.Value.(*Hangman)
 	return
 }
+
+func CompletedHangmen(userId int64, paginate *Paginate) (count int64, hangmen []*Hangman) {
+	hangmen = []*Hangman{}
+	limit, offset := paginate.ParseToLimitAndOffset()
+	filter := new(Hangman)
+	if userId != int64(0) {
+		filter.UserId = userId
+	}
+	err := DB.
+		Where(filter).
+		Where("status != ?", "PLAYING").
+		Order("hp desc").
+		Offset(offset).Limit(limit).Find(&hangmen).
+		Offset(-1).Limit(-1).Count(&count).
+		Error
+	if err != nil {
+		panic(err)
+	}
+	return
+}
