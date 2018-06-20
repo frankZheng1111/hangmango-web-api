@@ -18,7 +18,7 @@ type User struct {
 	WinCount     int32     `gorm:"column:win_count"`
 	FinishCount  int32     `gorm:"column:finish_count"`
 	WinRate      float32   `gorm:"column:win_rate"`
-	version      int       `gorm:"column:version"`
+	Version      int       `gorm:"column:version"`
 	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
 }
 
@@ -30,6 +30,28 @@ func init() {
 
 func (user *User) String() string {
 	return fmt.Sprintf("Id: %d, LoginName: %s, CreatedAt: %v", user.Id, user.LoginName, user.CreatedAt.Format(time.RFC3339))
+}
+
+func (user *User) UpdateScore(isWin bool) {
+	var rowsAffected int64 = 0
+	for rowsAffected == 0 {
+		currentVersion := user.Version
+		newVersion := currentVersion + 1
+		newFinishCount := user.FinishCount + 1
+		newWinCount := user.WinCount
+		if isWin {
+			newWinCount++
+		}
+		var winRate float32 = float32(newWinCount) / float32(newFinishCount)
+		rowsAffected = DB.Model(user).
+			Where("version = ?", currentVersion).
+			Updates(User{FinishCount: newFinishCount, WinCount: newWinCount, Version: newVersion, WinRate: winRate}).
+			RowsAffected
+		if rowsAffected == 0 {
+			DB.Where(&User{Id: user.Id}).First(user)
+		}
+	}
+	return
 }
 
 func (user *User) HangmenById(id int64) (hangman *Hangman, err error) {

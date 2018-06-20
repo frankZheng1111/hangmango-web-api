@@ -60,6 +60,9 @@ func GuessALetter(c *gin.Context) {
 	}
 	_, err = hangman.Guess(guessLetter.Letter)
 	lib.UnlockRedisLock(guessLetterKey, timestamp)
+	if hangman.Status != "PLAYING" {
+		user.UpdateScore(hangman.IsWin())
+	}
 	if err != nil {
 		panic(err)
 	}
