@@ -12,5 +12,6 @@ func InitHangmanRouters(userGroup *gin.RouterGroup) {
 	})
 	userGroup.Use(CommonPanicHandle(controller.ValidAuthToken))
 	userGroup.POST("/", CommonPanicHandle(controller.StartNewGame))
+	userGroup.GET("/completed-hangmen", CommonPanicHandle(controller.HangmanList))
 	userGroup.POST("/:id/guess", CommonPanicHandle(controller.GuessALetter))
 }
