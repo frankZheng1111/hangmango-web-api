@@ -1,5 +1,5 @@
 package serializer
 
 type BaseResource struct {
-	TotalCount int `json:"total_count"`
+	TotalCount int64 `json:"total_count"`
 }

@@ -21,7 +21,7 @@ type BaseUserResource struct {
 	Data []*BaseUser `json:"data"`
 }
 
-func SerializeBaseUsers(count int, users []*db.User) *BaseUserResource {
+func SerializeBaseUsers(count int64, users []*db.User) *BaseUserResource {
 	baseUserResource := new(BaseUserResource)
 	baseUserResource.TotalCount = count
 	baseUserResource.Data = []*BaseUser{}
