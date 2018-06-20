@@ -106,6 +106,7 @@ func GetBestUsers(paginate *Paginate) (count int, users []*User) {
 	users = []*User{}
 	limit, offset := paginate.ParseToLimitAndOffset()
 	err = DB.
+		Order("win_rate desc").
 		Offset(offset).Limit(limit).Find(&users).
 		Offset(-1).Limit(-1).Count(&count).
 		Error

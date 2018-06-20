@@ -12,6 +12,6 @@ func InitUserRouters(userGroup *gin.RouterGroup) {
 	})
 	userGroup.POST("/", CommonPanicHandle(controller.UserSignUp))
 	userGroup.POST("/signin", CommonPanicHandle(controller.UserSignIn))
-	userGroup.Use(controller.CommonPanicHandle(controller.ValidAuthToken))
 	userGroup.GET("/best-users", CommonPanicHandle(controller.GetBestUsers))
+	userGroup.Use(controller.CommonPanicHandle(controller.ValidAuthToken))
 }
