@@ -131,8 +131,11 @@ func CompletedHangmen(userId int64, paginate *Paginate) (count int64, hangmen []
 	}
 	err := DB.
 		Where(filter).
-		Where("status != ?", "PLAYING").
-		Order("hp desc").
+		Where("hangmen.status != ?", "PLAYING").
+		Select("hangmen.*, count(hangmen.id) as lettersCount").
+		Joins("left join hangman_guessed_letters on hangman_guessed_letters.hangman_id = hangmen.id").
+		Group("hangmen.id").
+		Order("hp desc, lettersCount desc").
 		Offset(offset).Limit(limit).
 		Preload("HangmenGuessedLetters").
 		Find(&hangmen).
