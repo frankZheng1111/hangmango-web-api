@@ -16,7 +16,7 @@ type Hangman struct {
 	Hp                    int    `gorm:"column:hp"`
 	Word                  string `gorm:"column:word"`
 	Status                string `gorm:"column:status;default:PLAYING"`
-	HangmenGuessedLetters []HangmanGuessedLetter
+	HangmanGuessedLetters []HangmanGuessedLetter
 }
 
 var HangmanSnowflake *lib.Snowflake
@@ -62,9 +62,9 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	return
 }
 
-func (hangman *Hangman) AssociatedHangmenGuessedLetters() []*HangmanGuessedLetter {
+func (hangman *Hangman) AssociatedHangmanGuessedLetters() []*HangmanGuessedLetter {
 	hangmanGuessedLetters := []*HangmanGuessedLetter{}
-	err := DB.Model(hangman).Association("HangmenGuessedLetters").Find(&hangmanGuessedLetters).Error
+	err := DB.Model(hangman).Association("HangmanGuessedLetters").Find(&hangmanGuessedLetters).Error
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +74,7 @@ func (hangman *Hangman) AssociatedHangmenGuessedLetters() []*HangmanGuessedLette
 func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]int) {
 	var hangmanGuessedLetters []*HangmanGuessedLetter
 	lettersMap = make(map[string]int)
-	hangmanGuessedLetters = hangman.AssociatedHangmenGuessedLetters()
+	hangmanGuessedLetters = hangman.AssociatedHangmanGuessedLetters()
 	for _, hangmanGuessedLetter := range hangmanGuessedLetters {
 		lettersMap[hangmanGuessedLetter.Letter]++
 	}
@@ -137,7 +137,7 @@ func CompletedHangmen(userId int64, paginate *Paginate) (count int64, hangmen []
 		Group("hangmen.id").
 		Order("hp desc, lettersCount desc").
 		Offset(offset).Limit(limit).
-		Preload("HangmenGuessedLetters").
+		Preload("HangmanGuessedLetters").
 		Find(&hangmen).
 		Offset(-1).Limit(-1).Count(&count).
 		Error

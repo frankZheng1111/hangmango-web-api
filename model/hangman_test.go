@@ -13,19 +13,19 @@ func TestStartNewGame(t *testing.T) {
 	assert.Equal(t, int64(1), hangman.UserId)
 }
 
-func TestAssociatedHangmenGuessedLetters(t *testing.T) {
+func TestAssociatedHangmanGuessedLetters(t *testing.T) {
 	InitTestDB()
 	hangman := new(Hangman)
 	hangman.Id = 1
 	DB.Where(hangman).Find(hangman)
-	letters := hangman.AssociatedHangmenGuessedLetters()
+	letters := hangman.AssociatedHangmanGuessedLetters()
 	assert.Equal(t, 1, len(letters))
 	assert.Equal(t, "a", letters[0].Letter)
 
 	hangman = new(Hangman)
 	hangman.Id = 2
 	DB.Where(hangman).Find(hangman)
-	letters = hangman.AssociatedHangmenGuessedLetters()
+	letters = hangman.AssociatedHangmanGuessedLetters()
 	assert.Equal(t, 0, len(letters))
 	assert.Nil(t, err)
 }
