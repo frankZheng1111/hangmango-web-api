@@ -79,7 +79,7 @@ func MissingLockErrorResponse(c *gin.Context) {
 func GenerateLoginToken(userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": userId,
-		"exp":    time.Now().Add(time.Hour * time.Duration(1)).Unix(),
+		"exp":    time.Now().Add(time.Hour * time.Duration(24)).Unix(),
 		"iat":    time.Now().Unix(),
 	})
 
