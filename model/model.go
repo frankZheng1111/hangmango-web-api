@@ -38,7 +38,7 @@ func init() {
 func InitModel() {
 	DB, err = gorm.Open(config.Config.GORM.Driver, config.Config.GORM.Open)
 	if err != nil {
-		panic("failed to connect database")
+		panic(err)
 	}
 
 	DB.DB().SetMaxIdleConns(config.Config.GORM.MaxIdle)
