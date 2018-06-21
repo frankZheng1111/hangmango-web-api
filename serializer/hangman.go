@@ -13,11 +13,12 @@ type GuessingHangman struct {
 }
 
 type CompletedHangman struct {
-	Id        int64     `json:"id"`
-	Word      string    `json:"word"`
-	Hp        int       `json:"hp"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Id                    int64            `json:"id"`
+	Word                  string           `json:"word"`
+	Hp                    int              `json:"hp"`
+	CreatedAt             time.Time        `json:"created_at"`
+	UpdatedAt             time.Time        `json:"updated_at"`
+	HangmanGuessedLetters []*GuessedLetter `json:"guessed_letters"`
 }
 
 type CompletedHangmanResource struct {
@@ -41,6 +42,10 @@ func SerializeCompletedHangman(count int64, hangmen []*db.Hangman) *CompletedHan
 		completedHangman := new(CompletedHangman)
 		completedHangmanType := reflect.TypeOf(completedHangman).Elem()
 		for i := 0; i < completedHangmanType.NumField(); i++ {
+			if completedHangmanType.Field(i).Name == "HangmanGuessedLetters" {
+				completedHangman.HangmanGuessedLetters = SerializeGuessedLetter(hangman.HangmanGuessedLetters)
+				continue
+			}
 			field := reflect.ValueOf(completedHangman).Elem().Field(i)
 			fieldValue := reflect.ValueOf(hangman).Elem().FieldByName(completedHangmanType.Field(i).Name)
 			field.Set(fieldValue)

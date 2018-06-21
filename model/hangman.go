@@ -16,7 +16,7 @@ type Hangman struct {
 	Hp                    int    `gorm:"column:hp"`
 	Word                  string `gorm:"column:word"`
 	Status                string `gorm:"column:status;default:PLAYING"`
-	HangmanGuessedLetters []HangmanGuessedLetter
+	HangmanGuessedLetters []*HangmanGuessedLetter
 }
 
 var HangmanSnowflake *lib.Snowflake
