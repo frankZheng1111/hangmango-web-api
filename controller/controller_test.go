@@ -123,7 +123,7 @@ func TestValidAuthToken(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	validToken, err := GenerateLoginToken(1)
+	validToken, _, err := GenerateLoginToken(1)
 	if err != nil {
 		panic(err)
 	}

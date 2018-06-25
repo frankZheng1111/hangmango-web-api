@@ -38,7 +38,7 @@ func UserSignIn(c *gin.Context) {
 		return
 	}
 	// SetSession(c, "userId", user.Id)
-	token, err := GenerateLoginToken(user.Id)
+	token, expiredAt, err := GenerateLoginToken(user.Id)
 
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
@@ -48,8 +48,9 @@ func UserSignIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"user_id": user.Id,
-		"token":   token,
+		"user_id":    user.Id,
+		"expired_at": expiredAt,
+		"token":      token,
 	})
 	return
 }

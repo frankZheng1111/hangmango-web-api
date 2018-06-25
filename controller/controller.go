@@ -76,16 +76,17 @@ func MissingLockErrorResponse(c *gin.Context) {
 	return
 }
 
-func GenerateLoginToken(userId int64) (string, error) {
+func GenerateLoginToken(userId int64) (string, int64, error) {
+	expiredAt := time.Now().Add(time.Hour * time.Duration(24)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": userId,
-		"exp":    time.Now().Add(time.Hour * time.Duration(24)).Unix(),
+		"exp":    expiredAt,
 		"iat":    time.Now().Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte(loginSecretKey))
 
-	return tokenString, err
+	return tokenString, expiredAt, err
 }
 
 func ParsePaginateFromQuery(c *gin.Context) *db.Paginate {
