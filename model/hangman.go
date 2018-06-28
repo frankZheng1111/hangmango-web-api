@@ -49,7 +49,7 @@ func (hangman *Hangman) Guess(letter string) (hangmanGuessedLetter *HangmanGuess
 	if !hangman.IsAlive() {
 		hangman.Status = "FAIL"
 	}
-	if hangman.IsWin() {
+	if hangman.WillWin(letter) {
 		hangman.Status = "WIN"
 	}
 	err = tx.Save(hangman).Error
@@ -83,6 +83,10 @@ func (hangman *Hangman) GuessedLettersMap() (lettersMap map[string]int) {
 
 func (hangman *Hangman) IsWin() bool {
 	return !strings.Contains(hangman.GameStr(), "*")
+}
+
+func (hangman *Hangman) WillWin(letter string) bool {
+	return strings.Replace(hangman.GameStr(), "*", letter, -1) == hangman.Word
 }
 
 func (hangman *Hangman) IsAlive() bool {
