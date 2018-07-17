@@ -17,7 +17,7 @@ type User struct {
 	PasswordHash string    `gorm:"column:password_hash"`
 	WinCount     int32     `gorm:"column:win_count"`
 	FinishCount  int32     `gorm:"column:finish_count"`
-	WinRate      float32   `gorm:"column:win_rate"`
+	WinRate      *float32  `gorm:"column:win_rate"`
 	Version      int       `gorm:"column:version"`
 	Hangmen      []Hangman `gorm:"ForeignKey:UserId;AssociationForeignKey:Id"`
 }
@@ -45,7 +45,7 @@ func (user *User) UpdateScore(isWin bool) {
 		var winRate float32 = float32(newWinCount) / float32(newFinishCount)
 		rowsAffected = DB.Model(user).
 			Where("version = ?", currentVersion).
-			Updates(User{FinishCount: newFinishCount, WinCount: newWinCount, Version: newVersion, WinRate: winRate}).
+			Updates(User{FinishCount: newFinishCount, WinCount: newWinCount, Version: newVersion, WinRate: &winRate}).
 			RowsAffected
 		if rowsAffected == 0 {
 			DB.Where(&User{Id: user.Id}).First(user)

@@ -9,7 +9,7 @@ import (
 type BaseUser struct {
 	Id          int64     `json:"id"`
 	LoginName   string    `json:"login_name"`
-	WinRate     float32   `json:"win_rate"`
+	WinRate     *float32  `json:"win_rate"`
 	FinishCount int32     `json:"finish_count"`
 	WinCount    int32     `json:"win_count"`
 	CreatedAt   time.Time `json:"created_at"`
